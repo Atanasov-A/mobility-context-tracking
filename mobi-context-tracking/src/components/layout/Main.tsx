@@ -1,35 +1,24 @@
-import { Box } from "@mui/material";
-import { useEffect, useState } from "react";
-import { LocationSearchAutocomplete } from "../LocationSearchAutocomplete";
-import { MapComponent } from "../map/MapComponent";
-import { GraphhoperLocation } from "../models/GraphhoperLocation";
+import { styled } from "@mui/material/styles";
 
-// https://docs.graphhopper.com/#operation/getGeocode
-// Search points
-const Main = () => {
-  const [selectedValueStartingLocation, setSelectedValueStartingLocation] =
-    useState<GraphhoperLocation>();
-  const [selectedValueEndLocation, setSelectedValueEndLocation] =
-    useState<GraphhoperLocation>();
+const drawerWidth = 240;
 
-  return (
-    <Box sx={{ flexGrow: 1, m: 1 }}>
-      <LocationSearchAutocomplete
-        label="Starting location"
-        selectedValue={selectedValueStartingLocation}
-        setSelectedValue={setSelectedValueStartingLocation}
-      />
-      <LocationSearchAutocomplete
-        label="End location"
-        selectedValue={selectedValueEndLocation}
-        setSelectedValue={setSelectedValueEndLocation}
-      />
-      <MapComponent
-        startingLocationMarker={selectedValueStartingLocation}
-        endLocationMarker={selectedValueEndLocation}
-      />
-    </Box>
-  );
-};
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })<{
+  open?: boolean;
+}>(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(2),
+  transition: theme.transitions.create("margin", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${drawerWidth}px`,
+  ...(open && {
+    transition: theme.transitions.create("margin", {
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
+    }),
+    marginLeft: 0,
+  }),
+}));
 
 export { Main };

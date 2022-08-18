@@ -1,16 +1,18 @@
-import { ThemeProvider, useTheme } from "@emotion/react";
-import {createTheme} from "@mui/material";
-import { AppToolbar } from "./components/layout/AppToolbar";
-import { Main } from "./components/layout/Main";
-import {theme} from "./components/theme/CustomTheme";
+import { ThemeProvider } from "@emotion/react";
+import { BrowserRouter } from "react-router-dom";
+import { AppBarWithMainLayout } from "./components/layout/AppBarWithMainLayout";
+import { theme } from "./components/theme/CustomTheme";
 
 function App() {
   return (
     <div className="App">
-      <ThemeProvider theme={theme}>
-        <AppToolbar />
-        <Main />
-      </ThemeProvider>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          {/* <AppToolbar /> */}
+          <AppBarWithMainLayout />
+          {/* <Main /> */}
+        </ThemeProvider>
+      </BrowserRouter>
     </div>
   );
 }

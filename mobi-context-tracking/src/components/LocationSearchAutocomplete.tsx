@@ -24,7 +24,6 @@ const LocationSearchAutocomplete = (props: Props) => {
     if (!firstRender) {
       const fetch = setTimeout(() => {
         fetchLocation();
-        //Your search query and it will run the function after 3secs from user stops typing
       }, 1000);
       return () => clearTimeout(fetch);
     }
