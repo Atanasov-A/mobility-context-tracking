@@ -48,6 +48,7 @@ const LocationSearchAutocomplete = (props: Props) => {
           component="li"
           sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
           {...props}
+          key={option?.name + new Date().toLocaleDateString()}
         >
           <img
             loading="lazy"
@@ -60,7 +61,6 @@ const LocationSearchAutocomplete = (props: Props) => {
           {option.state ? ` - ${option.state}` : ""}
         </Box>
       )}
-      // options={autocompleteOptions.map((option) => option.name)}
       renderInput={(params) => <TextField {...params} label={props.label} />}
       value={props.selectedValue}
       onChange={(event: any, newValue: GraphhoperLocation | null) => {

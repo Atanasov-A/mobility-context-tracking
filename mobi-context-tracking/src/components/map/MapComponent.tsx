@@ -2,12 +2,20 @@ import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
 import { GraphhoperLocation } from "../models/GraphhoperLocation";
+import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
 import { theme } from "../theme/CustomTheme";
 import { MapCustomMarker } from "./MapCustomMarker";
+import { MapRouting } from "./MapRouting";
 
 interface Props {
   startingLocationMarker?: GraphhoperLocation;
   endLocationMarker?: GraphhoperLocation;
+  setNewStartPointAfterMarkerDragged: React.Dispatch<
+    React.SetStateAction<GraphhoperLocationPoint>
+  >;
+  setNewEndPointAfterMarkerDragged: React.Dispatch<
+    React.SetStateAction<GraphhoperLocationPoint>
+  >;
 }
 
 const mapComputerHeight = "800px";
@@ -40,9 +48,24 @@ const MapComponent = (props: Props) => {
         />
         <MapCustomMarker
           key={"start"}
+          label={"Start location:"}
           markerLocation={props.startingLocationMarker}
         />
-        <MapCustomMarker key={"end"} markerLocation={props.endLocationMarker} />
+        <MapCustomMarker
+          key={"end"}
+          markerLocation={props.endLocationMarker}
+          label={"End location:"}
+        />
+        <MapRouting
+          startPoint={props.startingLocationMarker?.point}
+          endPoint={props.endLocationMarker?.point}
+          setNewStartPointAfterMarkerDragged={
+            props.setNewStartPointAfterMarkerDragged
+          }
+          setNewEndPointAfterMarkerDragged={
+            props.setNewEndPointAfterMarkerDragged
+          }
+        />
       </MapContainer>
     </Box>
   );

@@ -5,6 +5,7 @@ import { GraphhoperLocation } from "../models/GraphhoperLocation";
 
 interface Props {
   markerLocation?: GraphhoperLocation;
+  label?: string;
 }
 
 const MapCustomMarker = (props: Props) => {
@@ -36,11 +37,11 @@ const MapCustomMarker = (props: Props) => {
             )
           }
         >
-          <Popup>{props.markerLocation.name}</Popup>
+          <Popup>{props.label + " " + props.markerLocation.name}</Popup>
         </Marker>
       )}
     </>
   );
 };
 
-export { MapCustomMarker   };
+export { MapCustomMarker };
