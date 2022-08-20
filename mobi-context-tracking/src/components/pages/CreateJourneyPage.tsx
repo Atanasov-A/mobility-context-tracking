@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { HorizontalLinearStepper } from "../HorizontalLinearStepper";
+import {JourneyInformation} from "../JourneyInformation";
 import { MapWithSearchboxContainer } from "../map/MapWithSearchboxContainer";
 import { GraphhoperLocation } from "../models/GraphhoperLocation";
 import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
@@ -7,7 +8,7 @@ import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
 const firstStep = 0;
 const lastStep = 1;
 
-const SearchLocationPage = () => {
+const CreateJourneyPage = () => {
   const [selectedValueStartingLocation, setSelectedValueStartingLocation] =
     useState<GraphhoperLocation>();
   const [selectedValueEndLocation, setSelectedValueEndLocation] =
@@ -64,20 +65,21 @@ const SearchLocationPage = () => {
       />
 
       {activeStep === firstStep && (
-        <MapWithSearchboxContainer
-          selectedValueStartingLocation={selectedValueStartingLocation}
-          setSelectedValueStartingLocation={setSelectedValueStartingLocation}
-          selectedValueEndLocation={selectedValueEndLocation}
-          setSelectedValueEndLocation={setSelectedValueEndLocation}
-          setNewStartPointAfterMarkerDragged={
-            setNewStartPointAfterMarkerDragged
-          }
-          setNewEndPointAfterMarkerDragged={setNewEndPointAfterMarkerDragged}
-        />
+        <JourneyInformation />
+        // <MapWithSearchboxContainer
+        //   selectedValueStartingLocation={selectedValueStartingLocation}
+        //   setSelectedValueStartingLocation={setSelectedValueStartingLocation}
+        //   selectedValueEndLocation={selectedValueEndLocation}
+        //   setSelectedValueEndLocation={setSelectedValueEndLocation}
+        //   setNewStartPointAfterMarkerDragged={
+        //     setNewStartPointAfterMarkerDragged
+        //   }
+        //   setNewEndPointAfterMarkerDragged={setNewEndPointAfterMarkerDragged}
+        // />
       )}
-      {activeStep === lastStep && <div>NEW COMPONENT</div>}
+      {activeStep === lastStep && <JourneyInformation />}
     </>
   );
 };
 
-export { SearchLocationPage };
+export { CreateJourneyPage };

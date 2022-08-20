@@ -58,8 +58,11 @@ const MapRouting = (props: Props) => {
         );
       })
       .on("routesfound", function (e) {
-        const routeName = e.routes[0].name as string;
-        const distanceInMeters = e.routes[0].summary.totalDistance as number;
+        const routeName = e.routes[0]?.name as string;
+        const distanceInMeters = e.routes[0]?.summary?.totalDistance as number;
+        const travelTimeInSeconds = e.routes[0]?.summary?.totalTime as number;
+
+        console.log("Route", e.routes[0]);
 
         const startLocationName = routeName?.split(",")[0] ?? "";
         const endLocationName = routeName?.split(",")[1] ?? "";

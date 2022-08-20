@@ -12,6 +12,8 @@ import List from "@mui/material/List";
 import { useTheme } from "@mui/material/styles";
 import Toolbar from "@mui/material/Toolbar";
 import Typography from "@mui/material/Typography";
+import moment from "moment";
+import "moment/locale/de";
 import * as React from "react";
 import { RoutesComponent } from "../../routes/RoutesComponent";
 import { AppBar } from "./AppBar";
@@ -24,6 +26,10 @@ const drawerWidth = 240;
 function AppBarWithMainLayout() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    moment.locale("de");
+  }, []);
 
   const handleDrawerOpen = () => {
     setOpen(true);
