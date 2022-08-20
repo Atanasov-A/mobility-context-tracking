@@ -22,16 +22,16 @@ const mapComputerHeight = "800px";
 const mapPhoneHeight = "450px";
 
 const MapComponent = (props: Props) => {
-  const matches = useMediaQuery(theme.breakpoints.up("sm"));
+  const isBiggerThanSmartphone = useMediaQuery(theme.breakpoints.up("sm"));
   const [mapHeight, setMapHeight] = useState(mapComputerHeight);
 
   useEffect(() => {
-    if (matches) {
+    if (isBiggerThanSmartphone) {
       setMapHeight(mapComputerHeight);
     } else {
       setMapHeight(mapPhoneHeight);
     }
-  }, [matches]);
+  }, [isBiggerThanSmartphone]);
 
   return (
     <Box sx={{ height: mapHeight }}>
