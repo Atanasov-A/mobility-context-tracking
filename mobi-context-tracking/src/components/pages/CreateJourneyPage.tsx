@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { calculateDifferenceBetweenDatesInMillis } from "../../utils/dateHelpers";
 import { HorizontalLinearStepper } from "../HorizontalLinearStepper";
-import {JourneyInformation} from "../JourneyInformation";
+import { JourneyInformation } from "../JourneyInformation";
 import { MapWithSearchboxContainer } from "../map/MapWithSearchboxContainer";
 import { GraphhoperLocation } from "../models/GraphhoperLocation";
 import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
@@ -9,6 +10,11 @@ const firstStep = 0;
 const lastStep = 1;
 
 const CreateJourneyPage = () => {
+  const [activeStep, setActiveStep] = useState(0);
+  const [stepperValidationError, setStepperValidationError] = useState(false);
+  const [stepperValidationErrorIndex, setStepperValidationErrorIndex] =
+    useState(-1);
+
   const [selectedValueStartingLocation, setSelectedValueStartingLocation] =
     useState<GraphhoperLocation>();
   const [selectedValueEndLocation, setSelectedValueEndLocation] =
@@ -18,11 +24,44 @@ const CreateJourneyPage = () => {
     useState<GraphhoperLocationPoint>();
   const [newEndPointAfterMarkerDragged, setNewEndPointAfterMarkerDragged] =
     useState<GraphhoperLocationPoint>();
+  const [newSelectedStartingLocationName, setNewSelectedStartingLocationName] =
+    useState<string>();
+  const [newSelectedEndLocationName, setNewSelectedEndLocationName] =
+    useState<string>();
 
-  const [activeStep, setActiveStep] = useState(0);
-  const [stepperValidationError, setStepperValidationError] = useState(false);
-  const [stepperValidationErrorIndex, setStepperValidationErrorIndex] =
-    useState(-1);
+  const [startDateValue, setStartDateValue] = useState<Date | null>(null);
+  const [endDateValue, setEndDateValue] = useState<Date | null>(null);
+  const [travelDurationInMillis, setTravelDurationInMillis] = useState<
+    number | null
+  >(null);
+
+  const [selectedTravelPurposeValues, setSelectedTravelPurposeValues] =
+    useState<string[]>([]);
+  const [selectedWeatherValues, setSelectedWeatherValues] = useState<string[]>(
+    []
+  );
+  const [selectedTransportValues, setSelectedTransportValues] = useState<
+    string[]
+  >([]);
+  const [reasonForChosenTransport, setReasonForChosenTransport] =
+    useState<string>("");
+
+  console.log(
+    selectedTravelPurposeValues,
+    selectedWeatherValues,
+    selectedTransportValues,
+    reasonForChosenTransport
+  );
+
+  useEffect(() => {
+    if (startDateValue != null && endDateValue != null) {
+      const duration = calculateDifferenceBetweenDatesInMillis(
+        startDateValue,
+        endDateValue
+      );
+      setTravelDurationInMillis(duration);
+    }
+  }, [startDateValue, endDateValue]);
 
   const isStepValid = (stepIndex: number) => {
     if (stepIndex === firstStep) {
@@ -31,7 +70,21 @@ const CreateJourneyPage = () => {
         selectedValueEndLocation == null
       ) {
         setStepperValidationError(true);
-        setStepperValidationErrorIndex(0);
+        setStepperValidationErrorIndex(firstStep);
+        return false;
+      }
+    }
+    if (stepIndex === lastStep) {
+      if (
+        startDateValue == null ||
+        endDateValue == null ||
+        selectedTravelPurposeValues.length === 0 ||
+        selectedWeatherValues.length === 0 ||
+        selectedTransportValues.length === 0 ||
+        reasonForChosenTransport.trim() === ""
+      ) {
+        setStepperValidationError(true);
+        setStepperValidationErrorIndex(lastStep);
         return false;
       }
     }
@@ -65,7 +118,22 @@ const CreateJourneyPage = () => {
       />
 
       {activeStep === firstStep && (
-        <JourneyInformation />
+        <JourneyInformation
+          startDateValue={startDateValue}
+          setStartDateValue={setStartDateValue}
+          endDateValue={endDateValue}
+          setEndDateValue={setEndDateValue}
+          selectedTravelPurposeValues={selectedTravelPurposeValues}
+          setSelectedTravelPurposeValues={setSelectedTravelPurposeValues}
+          selectedWeatherValues={selectedWeatherValues}
+          setSelectedWeatherValues={setSelectedWeatherValues}
+          selectedTransportValues={selectedTransportValues}
+          setSelectedTransportValues={setSelectedTransportValues}
+          reasonForChosenTransport={reasonForChosenTransport}
+          setReasonForChosenTransport={setReasonForChosenTransport}
+          travelDurationInMillis={travelDurationInMillis}
+        />
+
         // <MapWithSearchboxContainer
         //   selectedValueStartingLocation={selectedValueStartingLocation}
         //   setSelectedValueStartingLocation={setSelectedValueStartingLocation}
@@ -77,7 +145,23 @@ const CreateJourneyPage = () => {
         //   setNewEndPointAfterMarkerDragged={setNewEndPointAfterMarkerDragged}
         // />
       )}
-      {activeStep === lastStep && <JourneyInformation />}
+      {activeStep === lastStep && (
+        <JourneyInformation
+          startDateValue={startDateValue}
+          setStartDateValue={setStartDateValue}
+          endDateValue={endDateValue}
+          setEndDateValue={setEndDateValue}
+          selectedTravelPurposeValues={selectedTravelPurposeValues}
+          setSelectedTravelPurposeValues={setSelectedTravelPurposeValues}
+          selectedWeatherValues={selectedWeatherValues}
+          setSelectedWeatherValues={setSelectedWeatherValues}
+          selectedTransportValues={selectedTransportValues}
+          setSelectedTransportValues={setSelectedTransportValues}
+          reasonForChosenTransport={reasonForChosenTransport}
+          setReasonForChosenTransport={setReasonForChosenTransport}
+          travelDurationInMillis={travelDurationInMillis}
+        />
+      )}
     </>
   );
 };

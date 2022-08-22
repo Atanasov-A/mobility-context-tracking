@@ -3,43 +3,49 @@ import Stack from "@mui/material/Stack";
 import TextField from "@mui/material/TextField";
 import { DesktopDateTimePicker } from "@mui/x-date-pickers/DesktopDateTimePicker";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
-import { useState } from "react";
 import { theme } from "../theme/CustomTheme";
 
-function CustomDateTimePicker() {
-  const [value, setValue] = useState<Date | null>();
+interface Props {
+  dateValue: Date;
+  setDateValue: React.Dispatch<React.SetStateAction<Date>>;
+  minDateTime?: Date;
+  label?: string;
+}
+
+function CustomDateTimePicker(props: Props) {
   const isBiggerThanSmartphone = useMediaQuery(theme.breakpoints.up("sm"));
 
   return (
     <Stack spacing={1}>
-      {/* <DateTimePicker
-        label="Responsive"
-        renderInput={(params) => <TextField {...params} />}
-        value={value}
-        onChange={(newValue) => {
-          setValue(newValue);
-        }}
-      /> */}
-
       {!isBiggerThanSmartphone && (
         <MobileDateTimePicker
-          label="For mobile"
-          value={value}
+          label={props.label}
+          value={props.dateValue}
           onChange={(newValue) => {
-            setValue(newValue);
+            props.setDateValue(newValue);
           }}
           renderInput={(params) => <TextField {...params} />}
+          minDateTime={props.minDateTime ? props.minDateTime : null}
+          disablePast={props.minDateTime ? true : false}
         />
       )}
 
       {isBiggerThanSmartphone && (
         <DesktopDateTimePicker
-          label="For desktop"
-          value={value}
+          label={props.label}
+          value={props.dateValue}
           onChange={(newValue) => {
-            setValue(newValue);
+            props.setDateValue(newValue);
           }}
-          renderInput={(params) => <TextField {...params} />}
+          renderInput={(params) => (
+            <TextField
+              onKeyDown={(e) => e.preventDefault()}
+              {...params}
+              helperText="Click on the calendar icon to select date"
+            />
+          )}
+          minDateTime={props.minDateTime ? props.minDateTime : null}
+          disablePast={props.minDateTime ? true : false}
         />
       )}
     </Stack>

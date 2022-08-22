@@ -1,8 +1,27 @@
 import { Box, Grid, TextField } from "@mui/material";
+import { Dispatch, SetStateAction } from "react";
+import { displayDifferenceInMillisHumanReadable } from "../utils/dateHelpers";
+import { TransportTypeEnum } from "./models/enums/TransportTypeEnum";
+import { TravelPurposeEnum } from "./models/enums/TravelPurposeEnum";
+import { WeatherEnum } from "./models/enums/WeatherEnum";
 import { CustomDateTimePicker } from "./shared/CustomDateTimePicker";
-import { StyledTextField } from "./shared/StyledTextField";
+import { MultiSelectDropdown } from "./shared/MultiSelectDropdown";
 
-interface Props {}
+interface Props {
+  startDateValue: Date;
+  setStartDateValue: Dispatch<SetStateAction<Date>>;
+  endDateValue: Date;
+  setEndDateValue: Dispatch<SetStateAction<Date>>;
+  selectedTravelPurposeValues: string[];
+  setSelectedTravelPurposeValues: Dispatch<SetStateAction<string[]>>;
+  selectedWeatherValues: string[];
+  setSelectedWeatherValues: Dispatch<SetStateAction<string[]>>;
+  selectedTransportValues: string[];
+  setSelectedTransportValues: Dispatch<SetStateAction<string[]>>;
+  reasonForChosenTransport: string;
+  setReasonForChosenTransport: Dispatch<SetStateAction<string>>;
+  travelDurationInMillis: number | null;
+}
 
 const JourneyInformation = (props: Props) => {
   return (
@@ -39,49 +58,63 @@ const JourneyInformation = (props: Props) => {
         </Grid>
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12} md={6}>
-            <CustomDateTimePicker />
+          <Grid item xs={12} md={5}>
+            <CustomDateTimePicker
+              label="Starting time"
+              dateValue={props.startDateValue}
+              setDateValue={props.setStartDateValue}
+            />
           </Grid>
-          <Grid item xs={12} md={6}>
-            <CustomDateTimePicker />
-          </Grid>
-        </Grid>
-
-        <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12} md={10}>
-            {/* Checkbox */}
-            <TextField
-              required
-              fullWidth
-              id="reason"
-              label="Reason for this journey"
-              name="Reason for this journey"
-              onChange={() => {}}
+          <Grid item xs={12} md={5}>
+            <CustomDateTimePicker
+              label="Ending time"
+              dateValue={props.endDateValue}
+              setDateValue={props.setEndDateValue}
+              minDateTime={props.startDateValue}
             />
           </Grid>
           <Grid item xs={12} md={2}>
             <TextField
-              required
-              disabled
               fullWidth
               id="duration"
-              label="Journey duration"
-              name="Journey duration"
+              value={displayDifferenceInMillisHumanReadable(
+                props.travelDurationInMillis
+              )}
+              label="Travel duration"
+              helperText="Dynamically calculated"
               onChange={() => {}}
+              InputProps={{ readOnly: true }}
+              InputLabelProps={{ shrink: true }}
             />
           </Grid>
         </Grid>
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={6}>
-            {/* Checkbox */}
-            <TextField
-              required
-              fullWidth
-              id="transportMode"
-              label="Transport type"
-              name="Transport type"
-              onChange={() => {}}
+            <MultiSelectDropdown
+              label={"Travel purpose"}
+              dropdownValues={Object.values(TravelPurposeEnum)}
+              selectedDropdownValues={props.selectedTravelPurposeValues}
+              setSelectedDropdownValues={props.setSelectedTravelPurposeValues}
+            />
+          </Grid>
+          <Grid item xs={12} md={6}>
+            <MultiSelectDropdown
+              label={"Weather"}
+              dropdownValues={Object.values(WeatherEnum)}
+              selectedDropdownValues={props.selectedWeatherValues}
+              setSelectedDropdownValues={props.setSelectedWeatherValues}
+            />
+          </Grid>
+        </Grid>
+
+        <Grid container spacing={2} sx={{ mb: 3 }}>
+          <Grid item xs={12} md={6}>
+            <MultiSelectDropdown
+              label={"Transportation type"}
+              dropdownValues={Object.values(TransportTypeEnum)}
+              selectedDropdownValues={props.selectedTransportValues}
+              setSelectedDropdownValues={props.setSelectedTransportValues}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -89,9 +122,11 @@ const JourneyInformation = (props: Props) => {
               required
               fullWidth
               id="reason"
-              label="Reason for choosing this transport"
-              name="Reason for choosing this transport"
-              onChange={() => {}}
+              label="Reason for the choice of this transport"
+              name={props.reasonForChosenTransport}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                props.setReasonForChosenTransport(event.target.value);
+              }}
             />
           </Grid>
         </Grid>
