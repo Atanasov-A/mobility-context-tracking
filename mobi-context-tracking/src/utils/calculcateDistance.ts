@@ -1,4 +1,4 @@
-import { GraphhoperLocationPoint } from "../components/models/GraphhoperLocationPoint";
+import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
 
 export function findDistanceBetweenTwoPointsInMeters(
   p1: GraphhoperLocationPoint,

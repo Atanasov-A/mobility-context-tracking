@@ -3,7 +3,7 @@ import "leaflet-routing-machine";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import { useEffect, useState } from "react";
 import { useMap } from "react-leaflet";
-import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
+import { GraphhoperLocationPoint } from "../../models/GraphhoperLocationPoint";
 
 interface Props {
   startPoint?: GraphhoperLocationPoint;
@@ -13,6 +13,12 @@ interface Props {
   >;
   setNewEndPointAfterMarkerDragged: React.Dispatch<
     React.SetStateAction<GraphhoperLocationPoint>
+  >;
+  setSelectedValueStartingLocationNameAfterMarkerDragged: React.Dispatch<
+    React.SetStateAction<string>
+  >;
+  setSelectedValueEndLocationNameAfterMarkerDragged: React.Dispatch<
+    React.SetStateAction<string>
   >;
 }
 
@@ -65,7 +71,13 @@ const MapRouting = (props: Props) => {
         console.log("Route", e.routes[0]);
 
         const startLocationName = routeName?.split(",")[0] ?? "";
+        props.setSelectedValueStartingLocationNameAfterMarkerDragged(
+          startLocationName
+        );
         const endLocationName = routeName?.split(",")[1] ?? "";
+        props.setSelectedValueEndLocationNameAfterMarkerDragged(
+          endLocationName
+        );
       });
 
     return () => {

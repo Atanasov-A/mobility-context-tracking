@@ -1,8 +1,8 @@
 import { Box, useMediaQuery } from "@mui/material";
 import { useEffect, useState } from "react";
 import { MapContainer, TileLayer } from "react-leaflet";
-import { GraphhoperLocation } from "../models/GraphhoperLocation";
-import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
+import { GraphhoperLocation } from "../../models/GraphhoperLocation";
+import { GraphhoperLocationPoint } from "../../models/GraphhoperLocationPoint";
 import { theme } from "../theme/CustomTheme";
 import { MapCustomMarker } from "./MapCustomMarker";
 import { MapRouting } from "./MapRouting";
@@ -15,6 +15,12 @@ interface Props {
   >;
   setNewEndPointAfterMarkerDragged: React.Dispatch<
     React.SetStateAction<GraphhoperLocationPoint>
+  >;
+  setSelectedValueStartingLocationNameAfterMarkerDragged: React.Dispatch<
+    React.SetStateAction<string>
+  >;
+  setSelectedValueEndLocationNameAfterMarkerDragged: React.Dispatch<
+    React.SetStateAction<string>
   >;
 }
 
@@ -64,6 +70,12 @@ const MapComponent = (props: Props) => {
           }
           setNewEndPointAfterMarkerDragged={
             props.setNewEndPointAfterMarkerDragged
+          }
+          setSelectedValueStartingLocationNameAfterMarkerDragged={
+            props.setSelectedValueStartingLocationNameAfterMarkerDragged
+          }
+          setSelectedValueEndLocationNameAfterMarkerDragged={
+            props.setSelectedValueEndLocationNameAfterMarkerDragged
           }
         />
       </MapContainer>

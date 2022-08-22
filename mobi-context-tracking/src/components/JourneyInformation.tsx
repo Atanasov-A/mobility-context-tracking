@@ -1,9 +1,9 @@
 import { Box, Grid, TextField } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
 import { displayDifferenceInMillisHumanReadable } from "../utils/dateHelpers";
-import { TransportTypeEnum } from "./models/enums/TransportTypeEnum";
-import { TravelPurposeEnum } from "./models/enums/TravelPurposeEnum";
-import { WeatherEnum } from "./models/enums/WeatherEnum";
+import { TransportTypeEnum } from "../models/enums/TransportTypeEnum";
+import { TravelPurposeEnum } from "../models/enums/TravelPurposeEnum";
+import { WeatherEnum } from "../models/enums/WeatherEnum";
 import { CustomDateTimePicker } from "./shared/CustomDateTimePicker";
 import { MultiSelectDropdown } from "./shared/MultiSelectDropdown";
 

@@ -1,6 +1,6 @@
 import { LocationSearchAutocomplete } from "../LocationSearchAutocomplete";
-import { GraphhoperLocation } from "../models/GraphhoperLocation";
-import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
+import { GraphhoperLocation } from "../../models/GraphhoperLocation";
+import { GraphhoperLocationPoint } from "../../models/GraphhoperLocationPoint";
 import { MapComponent } from "./MapComponent";
 
 interface Props {
@@ -17,6 +17,12 @@ interface Props {
   >;
   setNewEndPointAfterMarkerDragged: React.Dispatch<
     React.SetStateAction<GraphhoperLocationPoint>
+  >;
+  setSelectedValueStartingLocationNameAfterMarkerDragged: React.Dispatch<
+    React.SetStateAction<string>
+  >;
+  setSelectedValueEndLocationNameAfterMarkerDragged: React.Dispatch<
+    React.SetStateAction<string>
   >;
 }
 const MapWithSearchboxContainer = (props: Props) => {
@@ -40,6 +46,12 @@ const MapWithSearchboxContainer = (props: Props) => {
         }
         setNewEndPointAfterMarkerDragged={
           props.setNewEndPointAfterMarkerDragged
+        }
+        setSelectedValueStartingLocationNameAfterMarkerDragged={
+          props.setSelectedValueStartingLocationNameAfterMarkerDragged
+        }
+        setSelectedValueEndLocationNameAfterMarkerDragged={
+          props.setSelectedValueEndLocationNameAfterMarkerDragged
         }
       />
     </>

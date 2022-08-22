@@ -1,7 +1,7 @@
 import { LatLng } from "leaflet";
 import { useEffect, useState } from "react";
 import { Marker } from "react-leaflet";
-import { GraphhoperLocation } from "../models/GraphhoperLocation";
+import { GraphhoperLocation } from "../../models/GraphhoperLocation";
 
 interface Props {
   graphhoperLocations: GraphhoperLocation[];

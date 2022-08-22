@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+import { isSameLocation } from "../../utils/compareCoordinates";
 import { calculateDifferenceBetweenDatesInMillis } from "../../utils/dateHelpers";
 import { HorizontalLinearStepper } from "../HorizontalLinearStepper";
 import { JourneyInformation } from "../JourneyInformation";
 import { MapWithSearchboxContainer } from "../map/MapWithSearchboxContainer";
-import { GraphhoperLocation } from "../models/GraphhoperLocation";
-import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
+import { GraphhoperLocation } from "../../models/GraphhoperLocation";
+import { GraphhoperLocationPoint } from "../../models/GraphhoperLocationPoint";
+import { parseGraphHopperLocationName } from "../../utils/graphHopperLocationNameConverter";
 
 const firstStep = 0;
 const lastStep = 1;
@@ -24,10 +26,21 @@ const CreateJourneyPage = () => {
     useState<GraphhoperLocationPoint>();
   const [newEndPointAfterMarkerDragged, setNewEndPointAfterMarkerDragged] =
     useState<GraphhoperLocationPoint>();
-  const [newSelectedStartingLocationName, setNewSelectedStartingLocationName] =
-    useState<string>();
-  const [newSelectedEndLocationName, setNewSelectedEndLocationName] =
-    useState<string>();
+  const [
+    selectedValueStartingLocationNameAfterMarkerDragged,
+    setSelectedValueStartingLocationNameAfterMarkerDragged,
+  ] = useState<string>();
+  const [
+    selectedValueEndLocationNameAfterMarkerDragged,
+    setSelectedValueEndLocationNameAfterMarkerDragged,
+  ] = useState<string>();
+
+  const [startLocationName, setStartLocationName] = useState("");
+  const [endLocationName, setEndLocationName] = useState("");
+  const [startLocationPoint, setStartLocationPoint] =
+    useState<GraphhoperLocationPoint>();
+  const [endLocationPoint, setEndLocationPoint] =
+    useState<GraphhoperLocationPoint>();
 
   const [startDateValue, setStartDateValue] = useState<Date | null>(null);
   const [endDateValue, setEndDateValue] = useState<Date | null>(null);
@@ -46,12 +59,42 @@ const CreateJourneyPage = () => {
   const [reasonForChosenTransport, setReasonForChosenTransport] =
     useState<string>("");
 
-  console.log(
-    selectedTravelPurposeValues,
-    selectedWeatherValues,
-    selectedTransportValues,
-    reasonForChosenTransport
-  );
+  useEffect(() => {
+    if (
+      selectedValueStartingLocation != null &&
+      selectedValueEndLocation != null &&
+      // TODO Refactor undefined when marker not dragged
+      isSameLocation(
+        newStartPointAfterMarkerDragged,
+        selectedValueStartingLocation.point
+      ) &&
+      isSameLocation(
+        newEndPointAfterMarkerDragged,
+        selectedValueEndLocation.point
+      )
+    ) {
+      setStartLocationName(
+        parseGraphHopperLocationName(selectedValueStartingLocation)
+      );
+      setStartLocationPoint(selectedValueStartingLocation.point);
+      setEndLocationName(
+        parseGraphHopperLocationName(selectedValueEndLocation)
+      );
+      setEndLocationPoint(selectedValueEndLocation.point);
+    } else {
+      setStartLocationName(selectedValueStartingLocationNameAfterMarkerDragged);
+      setStartLocationPoint(newStartPointAfterMarkerDragged);
+      setEndLocationName(selectedValueEndLocationNameAfterMarkerDragged);
+      setEndLocationPoint(newEndPointAfterMarkerDragged);
+    }
+  }, [
+    newStartPointAfterMarkerDragged,
+    newEndPointAfterMarkerDragged,
+    selectedValueStartingLocation,
+    selectedValueEndLocation,
+    selectedValueStartingLocationNameAfterMarkerDragged,
+    selectedValueEndLocationNameAfterMarkerDragged,
+  ]);
 
   useEffect(() => {
     if (startDateValue != null && endDateValue != null) {
@@ -117,32 +160,56 @@ const CreateJourneyPage = () => {
         stepperValidationErrorIndex={stepperValidationErrorIndex}
       />
 
-      {activeStep === firstStep && (
-        <JourneyInformation
-          startDateValue={startDateValue}
-          setStartDateValue={setStartDateValue}
-          endDateValue={endDateValue}
-          setEndDateValue={setEndDateValue}
-          selectedTravelPurposeValues={selectedTravelPurposeValues}
-          setSelectedTravelPurposeValues={setSelectedTravelPurposeValues}
-          selectedWeatherValues={selectedWeatherValues}
-          setSelectedWeatherValues={setSelectedWeatherValues}
-          selectedTransportValues={selectedTransportValues}
-          setSelectedTransportValues={setSelectedTransportValues}
-          reasonForChosenTransport={reasonForChosenTransport}
-          setReasonForChosenTransport={setReasonForChosenTransport}
-          travelDurationInMillis={travelDurationInMillis}
+      {/* {null && (
+        <MapWithSearchboxContainer
+          selectedValueStartingLocation={selectedValueStartingLocation}
+          setSelectedValueStartingLocation={setSelectedValueStartingLocation}
+          selectedValueEndLocation={selectedValueEndLocation}
+          setSelectedValueEndLocation={setSelectedValueEndLocation}
+          setNewStartPointAfterMarkerDragged={
+            setNewStartPointAfterMarkerDragged
+          }
+          setNewEndPointAfterMarkerDragged={setNewEndPointAfterMarkerDragged}
+          setSelectedValueStartingLocationNameAfterMarkerDragged={
+            setSelectedValueStartingLocationNameAfterMarkerDragged
+          }
+          setSelectedValueEndLocationNameAfterMarkerDragged={
+            setSelectedValueEndLocationNameAfterMarkerDragged
+          }
         />
+      )} */}
 
-        // <MapWithSearchboxContainer
-        //   selectedValueStartingLocation={selectedValueStartingLocation}
-        //   setSelectedValueStartingLocation={setSelectedValueStartingLocation}
-        //   selectedValueEndLocation={selectedValueEndLocation}
-        //   setSelectedValueEndLocation={setSelectedValueEndLocation}
-        //   setNewStartPointAfterMarkerDragged={
-        //     setNewStartPointAfterMarkerDragged
-        //   }
-        //   setNewEndPointAfterMarkerDragged={setNewEndPointAfterMarkerDragged}
+      {activeStep === firstStep && (
+        <MapWithSearchboxContainer
+          selectedValueStartingLocation={selectedValueStartingLocation}
+          setSelectedValueStartingLocation={setSelectedValueStartingLocation}
+          selectedValueEndLocation={selectedValueEndLocation}
+          setSelectedValueEndLocation={setSelectedValueEndLocation}
+          setNewStartPointAfterMarkerDragged={
+            setNewStartPointAfterMarkerDragged
+          }
+          setNewEndPointAfterMarkerDragged={setNewEndPointAfterMarkerDragged}
+          setSelectedValueStartingLocationNameAfterMarkerDragged={
+            setSelectedValueStartingLocationNameAfterMarkerDragged
+          }
+          setSelectedValueEndLocationNameAfterMarkerDragged={
+            setSelectedValueEndLocationNameAfterMarkerDragged
+          }
+        />
+        // <JourneyInformation
+        //   startDateValue={startDateValue}
+        //   setStartDateValue={setStartDateValue}
+        //   endDateValue={endDateValue}
+        //   setEndDateValue={setEndDateValue}
+        //   selectedTravelPurposeValues={selectedTravelPurposeValues}
+        //   setSelectedTravelPurposeValues={setSelectedTravelPurposeValues}
+        //   selectedWeatherValues={selectedWeatherValues}
+        //   setSelectedWeatherValues={setSelectedWeatherValues}
+        //   selectedTransportValues={selectedTransportValues}
+        //   setSelectedTransportValues={setSelectedTransportValues}
+        //   reasonForChosenTransport={reasonForChosenTransport}
+        //   setReasonForChosenTransport={setReasonForChosenTransport}
+        //   travelDurationInMillis={travelDurationInMillis}
         // />
       )}
       {activeStep === lastStep && (

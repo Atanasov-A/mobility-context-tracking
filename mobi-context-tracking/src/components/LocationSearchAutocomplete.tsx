@@ -1,7 +1,7 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import { findLocationBySearchTerm } from "../api/graphhopper/findLocation.get";
-import { GraphhoperLocation } from "./models/GraphhoperLocation";
+import { GraphhoperLocation } from "../models/GraphhoperLocation";
 
 interface Props {
   label: string;
