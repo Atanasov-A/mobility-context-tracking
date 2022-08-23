@@ -12,7 +12,6 @@ const MapMarker = (props: Props) => {
 
   useEffect(() => {
     if (props.graphhoperLocations.length !== 0) {
-      console.log(props.graphhoperLocations);
       const markers = props.graphhoperLocations.map((gl) => {
         return new LatLng(gl?.point?.lat, gl?.point?.lng);
       });

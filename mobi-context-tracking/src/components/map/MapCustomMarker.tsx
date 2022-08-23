@@ -1,11 +1,12 @@
 import { LatLng } from "leaflet";
 import { useEffect } from "react";
 import { Marker, Popup, useMap } from "react-leaflet";
-import { GraphhoperLocation } from "../../models/GraphhoperLocation";
+import { GraphhoperLocationPoint } from "../../models/GraphhoperLocationPoint";
 
 interface Props {
-  markerLocation?: GraphhoperLocation;
+  markerPointLocation?: GraphhoperLocationPoint;
   label?: string;
+  markerName?: string;
 }
 
 const MapCustomMarker = (props: Props) => {
@@ -13,31 +14,29 @@ const MapCustomMarker = (props: Props) => {
 
   useEffect(() => {
     if (
-      props.markerLocation != null &&
-      props.markerLocation.point != null &&
-      props.markerLocation.point.lat != null &&
-      props.markerLocation.point.lng != null
+      props.markerPointLocation != null &&
+      props.markerPointLocation.lat != null &&
+      props.markerPointLocation.lng != null
     )
       map.flyTo(
-        new LatLng(
-          props.markerLocation.point.lat,
-          props.markerLocation.point.lng
-        )
+        new LatLng(props.markerPointLocation.lat, props.markerPointLocation.lng)
       );
-  }, [props.markerLocation, map]);
+  }, [props.markerPointLocation, map]);
 
   return (
     <>
-      {props.markerLocation && (
+      {props.markerPointLocation && (
         <Marker
           position={
             new LatLng(
-              props.markerLocation.point.lat,
-              props.markerLocation.point.lng
+              props.markerPointLocation.lat,
+              props.markerPointLocation.lng
             )
           }
         >
-          <Popup>{props.label + " " + props.markerLocation.name}</Popup>
+          {props.label && props.markerName && (
+            <Popup>{props.label + " " + props.markerName}</Popup>
+          )}
         </Marker>
       )}
     </>
