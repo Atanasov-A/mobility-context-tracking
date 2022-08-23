@@ -68,8 +68,6 @@ const MapRouting = (props: Props) => {
         const distanceInMeters = e.routes[0]?.summary?.totalDistance as number;
         const travelTimeInSeconds = e.routes[0]?.summary?.totalTime as number;
 
-        console.log("Route", e.routes[0]);
-
         const startLocationName = routeName?.split(",")[0] ?? "";
         props.setSelectedValueStartingLocationNameAfterMarkerDragged(
           startLocationName

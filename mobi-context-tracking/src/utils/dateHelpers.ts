@@ -11,11 +11,11 @@ export const calculateDifferenceBetweenDatesInMillis = (
   return difference;
 };
 
-export const displayDifferenceInMillisHumanReadable = (
-  timeDifference: number | null
+export const displayDurationInMillisHumanReadable = (
+  duration: number | null
 ) => {
-  if (timeDifference != null) {
-    return moment.duration(timeDifference, "milliseconds").humanize();
+  if (duration != null) {
+    return moment.duration(duration, "milliseconds").humanize();
   }
   return "";
 };

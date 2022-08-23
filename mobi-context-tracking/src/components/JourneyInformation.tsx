@@ -1,9 +1,10 @@
 import { Box, Grid, TextField } from "@mui/material";
 import { Dispatch, SetStateAction } from "react";
-import { displayDifferenceInMillisHumanReadable } from "../utils/dateHelpers";
+import { LABEL_CONSTANTS } from "../constants/ComponentsLabels";
 import { TransportTypeEnum } from "../models/enums/TransportTypeEnum";
 import { TravelPurposeEnum } from "../models/enums/TravelPurposeEnum";
 import { WeatherEnum } from "../models/enums/WeatherEnum";
+import { displayDurationInMillisHumanReadable } from "../utils/dateHelpers";
 import { CustomDateTimePicker } from "./shared/CustomDateTimePicker";
 import { MultiSelectDropdown } from "./shared/MultiSelectDropdown";
 
@@ -21,6 +22,10 @@ interface Props {
   reasonForChosenTransport: string;
   setReasonForChosenTransport: Dispatch<SetStateAction<string>>;
   travelDurationInMillis: number | null;
+  startLocationName: string;
+  setStartLocationName: Dispatch<SetStateAction<string>>;
+  endLocationName: string;
+  setEndLocationName: Dispatch<SetStateAction<string>>;
 }
 
 const JourneyInformation = (props: Props) => {
@@ -40,9 +45,12 @@ const JourneyInformation = (props: Props) => {
               required
               fullWidth
               id="startLocation"
-              label="Start location"
-              name="Start location"
-              onChange={() => {}}
+              label={LABEL_CONSTANTS.startLocation}
+              name={LABEL_CONSTANTS.startLocation}
+              value={props.startLocationName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                props.setStartLocationName(event.target.value);
+              }}
             />
           </Grid>
           <Grid item xs={12} md={6}>
@@ -50,9 +58,12 @@ const JourneyInformation = (props: Props) => {
               required
               fullWidth
               id="endLocation"
-              label="End location"
-              name="End location"
-              onChange={() => {}}
+              label={LABEL_CONSTANTS.endLocation}
+              name={LABEL_CONSTANTS.endLocation}
+              value={props.endLocationName}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                props.setEndLocationName(event.target.value);
+              }}
             />
           </Grid>
         </Grid>
@@ -60,14 +71,14 @@ const JourneyInformation = (props: Props) => {
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={5}>
             <CustomDateTimePicker
-              label="Starting time"
+              label={LABEL_CONSTANTS.startTime}
               dateValue={props.startDateValue}
               setDateValue={props.setStartDateValue}
             />
           </Grid>
           <Grid item xs={12} md={5}>
             <CustomDateTimePicker
-              label="Ending time"
+              label={LABEL_CONSTANTS.endTime}
               dateValue={props.endDateValue}
               setDateValue={props.setEndDateValue}
               minDateTime={props.startDateValue}
@@ -77,10 +88,10 @@ const JourneyInformation = (props: Props) => {
             <TextField
               fullWidth
               id="duration"
-              value={displayDifferenceInMillisHumanReadable(
+              value={displayDurationInMillisHumanReadable(
                 props.travelDurationInMillis
               )}
-              label="Travel duration"
+              label={LABEL_CONSTANTS.travelDuration}
               helperText="Dynamically calculated"
               onChange={() => {}}
               InputProps={{ readOnly: true }}
@@ -92,7 +103,7 @@ const JourneyInformation = (props: Props) => {
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={6}>
             <MultiSelectDropdown
-              label={"Travel purpose"}
+              label={LABEL_CONSTANTS.travelPurpose}
               dropdownValues={Object.values(TravelPurposeEnum)}
               selectedDropdownValues={props.selectedTravelPurposeValues}
               setSelectedDropdownValues={props.setSelectedTravelPurposeValues}
@@ -100,7 +111,7 @@ const JourneyInformation = (props: Props) => {
           </Grid>
           <Grid item xs={12} md={6}>
             <MultiSelectDropdown
-              label={"Weather"}
+              label={LABEL_CONSTANTS.weather}
               dropdownValues={Object.values(WeatherEnum)}
               selectedDropdownValues={props.selectedWeatherValues}
               setSelectedDropdownValues={props.setSelectedWeatherValues}
@@ -111,7 +122,7 @@ const JourneyInformation = (props: Props) => {
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={6}>
             <MultiSelectDropdown
-              label={"Transportation type"}
+              label={LABEL_CONSTANTS.transportType}
               dropdownValues={Object.values(TransportTypeEnum)}
               selectedDropdownValues={props.selectedTransportValues}
               setSelectedDropdownValues={props.setSelectedTransportValues}
@@ -122,7 +133,7 @@ const JourneyInformation = (props: Props) => {
               required
               fullWidth
               id="reason"
-              label="Reason for the choice of this transport"
+              label={LABEL_CONSTANTS.transportTypeReason}
               name={props.reasonForChosenTransport}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 props.setReasonForChosenTransport(event.target.value);

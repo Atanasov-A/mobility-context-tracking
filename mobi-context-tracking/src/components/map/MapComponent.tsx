@@ -8,23 +8,24 @@ import { MapCustomMarker } from "./MapCustomMarker";
 import { MapRouting } from "./MapRouting";
 
 interface Props {
-  startingLocationMarker?: GraphhoperLocation;
-  endLocationMarker?: GraphhoperLocation;
-  setNewStartPointAfterMarkerDragged: React.Dispatch<
-    React.SetStateAction<GraphhoperLocationPoint>
-  >;
-  setNewEndPointAfterMarkerDragged: React.Dispatch<
-    React.SetStateAction<GraphhoperLocationPoint>
-  >;
-  setSelectedValueStartingLocationNameAfterMarkerDragged: React.Dispatch<
-    React.SetStateAction<string>
-  >;
-  setSelectedValueEndLocationNameAfterMarkerDragged: React.Dispatch<
-    React.SetStateAction<string>
-  >;
+  children?: React.ReactNode;
+  // startingLocationMarker?: GraphhoperLocation;
+  // endLocationMarker?: GraphhoperLocation;
+  // setNewStartPointAfterMarkerDragged: React.Dispatch<
+  //   React.SetStateAction<GraphhoperLocationPoint>
+  // >;
+  // setNewEndPointAfterMarkerDragged: React.Dispatch<
+  //   React.SetStateAction<GraphhoperLocationPoint>
+  // >;
+  // setSelectedValueStartingLocationNameAfterMarkerDragged: React.Dispatch<
+  //   React.SetStateAction<string>
+  // >;
+  // setSelectedValueEndLocationNameAfterMarkerDragged: React.Dispatch<
+  //   React.SetStateAction<string>
+  // >;
 }
 
-const mapComputerHeight = "800px";
+const mapComputerHeight = "700px";
 const mapPhoneHeight = "450px";
 
 const MapComponent = (props: Props) => {
@@ -52,7 +53,9 @@ const MapComponent = (props: Props) => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
         />
-        <MapCustomMarker
+        {props.children}
+
+        {/* <MapCustomMarker
           key={"start"}
           label={"Start location:"}
           markerLocation={props.startingLocationMarker}
@@ -77,7 +80,7 @@ const MapComponent = (props: Props) => {
           setSelectedValueEndLocationNameAfterMarkerDragged={
             props.setSelectedValueEndLocationNameAfterMarkerDragged
           }
-        />
+        /> */}
       </MapContainer>
     </Box>
   );

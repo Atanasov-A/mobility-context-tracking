@@ -1,7 +1,10 @@
-import { LocationSearchAutocomplete } from "../LocationSearchAutocomplete";
+import { LABEL_CONSTANTS } from "../../constants/ComponentsLabels";
 import { GraphhoperLocation } from "../../models/GraphhoperLocation";
 import { GraphhoperLocationPoint } from "../../models/GraphhoperLocationPoint";
+import { LocationSearchAutocomplete } from "../LocationSearchAutocomplete";
 import { MapComponent } from "./MapComponent";
+import { MapCustomMarker } from "./MapCustomMarker";
+import { MapRouting } from "./MapRouting";
 
 interface Props {
   selectedValueStartingLocation: GraphhoperLocation;
@@ -29,31 +32,60 @@ const MapWithSearchboxContainer = (props: Props) => {
   return (
     <>
       <LocationSearchAutocomplete
-        label="Starting location"
+        label={LABEL_CONSTANTS.startLocation}
         selectedValue={props.selectedValueStartingLocation}
         setSelectedValue={props.setSelectedValueStartingLocation}
       />
       <LocationSearchAutocomplete
-        label="End location"
+        label={LABEL_CONSTANTS.endLocation}
         selectedValue={props.selectedValueEndLocation}
         setSelectedValue={props.setSelectedValueEndLocation}
       />
       <MapComponent
-        startingLocationMarker={props.selectedValueStartingLocation}
-        endLocationMarker={props.selectedValueEndLocation}
-        setNewStartPointAfterMarkerDragged={
-          props.setNewStartPointAfterMarkerDragged
-        }
-        setNewEndPointAfterMarkerDragged={
-          props.setNewEndPointAfterMarkerDragged
-        }
-        setSelectedValueStartingLocationNameAfterMarkerDragged={
-          props.setSelectedValueStartingLocationNameAfterMarkerDragged
-        }
-        setSelectedValueEndLocationNameAfterMarkerDragged={
-          props.setSelectedValueEndLocationNameAfterMarkerDragged
-        }
-      />
+      // startingLocationMarker={props.selectedValueStartingLocation}
+      // endLocationMarker={props.selectedValueEndLocation}
+      // setNewStartPointAfterMarkerDragged={
+      //   props.setNewStartPointAfterMarkerDragged
+      // }
+      // setNewEndPointAfterMarkerDragged={
+      //   props.setNewEndPointAfterMarkerDragged
+      // }
+      // setSelectedValueStartingLocationNameAfterMarkerDragged={
+      //   props.setSelectedValueStartingLocationNameAfterMarkerDragged
+      // }
+      // setSelectedValueEndLocationNameAfterMarkerDragged={
+      //   props.setSelectedValueEndLocationNameAfterMarkerDragged
+      // }
+      >
+        <MapCustomMarker
+          key={"start"}
+          label={LABEL_CONSTANTS.startLocation}
+          markerPointLocation={props.selectedValueStartingLocation?.point}
+          markerName={props.selectedValueStartingLocation?.name}
+        />
+        <MapCustomMarker
+          key={"end"}
+          label={LABEL_CONSTANTS.endLocation}
+          markerPointLocation={props.selectedValueEndLocation?.point}
+          markerName={props.selectedValueEndLocation?.name}
+        />
+        <MapRouting
+          startPoint={props.selectedValueEndLocation?.point}
+          endPoint={props.selectedValueEndLocation?.point}
+          setNewStartPointAfterMarkerDragged={
+            props.setNewStartPointAfterMarkerDragged
+          }
+          setNewEndPointAfterMarkerDragged={
+            props.setNewEndPointAfterMarkerDragged
+          }
+          setSelectedValueStartingLocationNameAfterMarkerDragged={
+            props.setSelectedValueStartingLocationNameAfterMarkerDragged
+          }
+          setSelectedValueEndLocationNameAfterMarkerDragged={
+            props.setSelectedValueEndLocationNameAfterMarkerDragged
+          }
+        />
+      </MapComponent>
     </>
   );
 };

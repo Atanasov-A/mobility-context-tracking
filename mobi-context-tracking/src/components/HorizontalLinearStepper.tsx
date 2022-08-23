@@ -16,6 +16,7 @@ interface Props {
   setActiveStep: React.Dispatch<React.SetStateAction<number>>;
   handleNext: () => void;
   handleBack: () => void;
+  handleOnComplete: () => void;
   stepperValidationError: boolean;
   stepperValidationErrorIndex: number;
 }
@@ -50,9 +51,26 @@ const HorizontalLinearStepper = (props: Props) => {
       </Stepper>
       {props.activeStep === steps.length ? (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            All steps completed - you&apos;re finished
-          </Typography>
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              pt: 1,
+              alignItems: "center",
+            }}
+          >
+            <Typography sx={{ mt: 2, mb: 1 }}>All steps completed!</Typography>
+          </Box>
+
+          <Box sx={{ display: "flex", flexDirection: "row" }}>
+            <Button color="inherit" onClick={props.handleBack} sx={{ mr: 1 }}>
+              Back
+            </Button>
+            <Box sx={{ flex: "1 1 auto" }} />
+            <Button onClick={props.handleOnComplete}>
+              Save the data on the server
+            </Button>
+          </Box>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
           </Box>
@@ -73,7 +91,7 @@ const HorizontalLinearStepper = (props: Props) => {
             </Button>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button onClick={props.handleNext}>
-              {props.activeStep === steps.length - 1 ? "Finish" : "Next"}
+              {props.activeStep === steps.length ? "Save data" : "Next"}
             </Button>
           </Box>
         </React.Fragment>
