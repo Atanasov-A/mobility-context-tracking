@@ -41,22 +41,7 @@ const MapWithSearchboxContainer = (props: Props) => {
         selectedValue={props.selectedValueEndLocation}
         setSelectedValue={props.setSelectedValueEndLocation}
       />
-      <MapComponent
-      // startingLocationMarker={props.selectedValueStartingLocation}
-      // endLocationMarker={props.selectedValueEndLocation}
-      // setNewStartPointAfterMarkerDragged={
-      //   props.setNewStartPointAfterMarkerDragged
-      // }
-      // setNewEndPointAfterMarkerDragged={
-      //   props.setNewEndPointAfterMarkerDragged
-      // }
-      // setSelectedValueStartingLocationNameAfterMarkerDragged={
-      //   props.setSelectedValueStartingLocationNameAfterMarkerDragged
-      // }
-      // setSelectedValueEndLocationNameAfterMarkerDragged={
-      //   props.setSelectedValueEndLocationNameAfterMarkerDragged
-      // }
-      >
+      <MapComponent>
         <MapCustomMarker
           key={"start"}
           label={LABEL_CONSTANTS.startLocation}
