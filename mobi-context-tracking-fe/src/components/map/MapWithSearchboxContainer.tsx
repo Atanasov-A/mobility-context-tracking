@@ -54,8 +54,9 @@ const MapWithSearchboxContainer = (props: Props) => {
           markerPointLocation={props.selectedValueEndLocation?.point}
           markerName={props.selectedValueEndLocation?.name}
         />
+
         <MapRouting
-          startPoint={props.selectedValueEndLocation?.point}
+          startPoint={props.selectedValueStartingLocation?.point}
           endPoint={props.selectedValueEndLocation?.point}
           setNewStartPointAfterMarkerDragged={
             props.setNewStartPointAfterMarkerDragged
