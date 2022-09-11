@@ -4,14 +4,9 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const dbConnection = require("../db/db.js");
 
-const userMiddleware = require("../middleware/users.js");
 const { isLoggedIn } = require("../middleware/isLoggedIn.js");
 const { body, validationResult } = require("express-validator");
 const { signJwtToken } = require("../utils/tokenUtils.js");
-
-authRouter.get("/register", (req, res) => {
-  res.send("register");
-});
 
 authRouter.post(
   "/register",
