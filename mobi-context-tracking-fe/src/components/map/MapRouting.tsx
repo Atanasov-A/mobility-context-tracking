@@ -20,20 +20,39 @@ interface Props {
   setSelectedValueEndLocationNameAfterMarkerDragged: React.Dispatch<
     React.SetStateAction<string>
   >;
+  // setRouteFound: React.Dispatch<React.SetStateAction<boolean>>;
 }
+const locationStartAndEndPoints = [];
 
 const MapRouting = (props: Props) => {
   const map = useMap();
   const [locationPoints, setLocationPoints] = useState<L.LatLng[]>();
 
   useEffect(() => {
-    if (props.startPoint != null && props.endPoint != null) {
-      const points = [
-        L.latLng(props.startPoint.lat, props.startPoint.lng),
-        L.latLng(props.endPoint.lat, props.endPoint.lng),
-      ];
-      setLocationPoints(points);
+    if (props.startPoint != null) {
+      locationStartAndEndPoints[0] = L.latLng(
+        props.startPoint.lat,
+        props.startPoint.lng
+      );
     }
+    if (props.endPoint != null) {
+      locationStartAndEndPoints[1] = L.latLng(
+        props.endPoint.lat,
+        props.endPoint.lng
+      );
+    }
+    if (props.startPoint != null || props.endPoint != null) {
+      setLocationPoints(locationStartAndEndPoints);
+    }
+
+    // if (props.startPoint != null && props.endPoint != null) {
+    //   const points = [
+    //     L.latLng(props.startPoint.lat, props.startPoint.lng),
+    //     L.latLng(props.endPoint.lat, props.endPoint.lng),
+    //   ];
+    //   props.setRouteFound(true);
+    //   setLocationPoints(points);
+    // }
   }, [props.startPoint, props.endPoint]);
 
   useEffect(() => {
@@ -41,6 +60,7 @@ const MapRouting = (props: Props) => {
 
     const routingControl = L.Routing.control({
       waypoints: locationPoints,
+      waypointMode: "snap",
       routeWhileDragging: true,
       lineOptions: {
         styles: [
@@ -55,18 +75,27 @@ const MapRouting = (props: Props) => {
       },
     })
       .addTo(map)
-      .on("waypointschanged", function (e) {
-        props.setNewStartPointAfterMarkerDragged(
-          e.waypoints[0].latLng as GraphhoperLocationPoint
-        );
-        props.setNewStartPointAfterMarkerDragged(
-          e.waypoints[1].latLng as GraphhoperLocationPoint
-        );
-      })
+      // .on("waypointschanged", function (e) {
+      //   props.setNewStartPointAfterMarkerDragged(
+      //     e.waypoints[0].latLng as GraphhoperLocationPoint
+      //   );
+      //   props.setNewEndPointAfterMarkerDragged(
+      //     e.waypoints[1].latLng as GraphhoperLocationPoint
+      //   );
+      // })
       .on("routesfound", function (e) {
         const routeName = e.routes[0]?.name as string;
         const distanceInMeters = e.routes[0]?.summary?.totalDistance as number;
         const travelTimeInSeconds = e.routes[0]?.summary?.totalTime as number;
+
+        const startLocationPoint = e.waypoints[0]
+          .latLng as GraphhoperLocationPoint;
+        const endLocationPoint = e.waypoints[1]
+          .latLng as GraphhoperLocationPoint;
+
+        props.setNewStartPointAfterMarkerDragged(startLocationPoint);
+
+        props.setNewEndPointAfterMarkerDragged(endLocationPoint);
 
         const startLocationName = routeName?.split(",")[0] ?? "";
         props.setSelectedValueStartingLocationNameAfterMarkerDragged(

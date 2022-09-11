@@ -4,7 +4,7 @@ import { LABEL_CONSTANTS } from "../constants/ComponentsLabels";
 import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
 import { displayDurationInMillisHumanReadable } from "../utils/dateHelpers";
 import { MapComponent } from "./map/MapComponent";
-import { MapCustomMarker } from "./map/MapCustomMarker";
+import { ReadOnlyMapRouting } from "./map/ReadOnlyMapRouting";
 
 interface Props {
   startDateValue: Date;
@@ -126,7 +126,7 @@ const TravelInformationCheckData = (props: Props) => {
       </Grid>
 
       <MapComponent>
-        <MapCustomMarker
+        {/* <MapCustomMarker
           key={LABEL_CONSTANTS.startLocation}
           label={LABEL_CONSTANTS.startLocation + " - "}
           markerPointLocation={props.startLocationPoint}
@@ -137,6 +137,11 @@ const TravelInformationCheckData = (props: Props) => {
           label={LABEL_CONSTANTS.endLocation + " - "}
           markerPointLocation={props.endLocationPoint}
           markerName={props.endLocationName}
+        /> */}
+
+        <ReadOnlyMapRouting
+          startPoint={props.startLocationPoint}
+          endPoint={props.endLocationPoint}
         />
       </MapComponent>
     </Box>

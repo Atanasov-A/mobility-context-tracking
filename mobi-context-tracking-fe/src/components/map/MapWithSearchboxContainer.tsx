@@ -1,9 +1,9 @@
+import { Box } from "@mui/material";
 import { LABEL_CONSTANTS } from "../../constants/ComponentsLabels";
 import { GraphhoperLocation } from "../../models/GraphhoperLocation";
 import { GraphhoperLocationPoint } from "../../models/GraphhoperLocationPoint";
 import { LocationSearchAutocomplete } from "../LocationSearchAutocomplete";
 import { MapComponent } from "./MapComponent";
-import { MapCustomMarker } from "./MapCustomMarker";
 import { MapRouting } from "./MapRouting";
 
 interface Props {
@@ -31,6 +31,23 @@ interface Props {
 const MapWithSearchboxContainer = (props: Props) => {
   return (
     <>
+      <Box>
+        Please enter the location in the following format. A{" "}
+        <Box component="span" sx={{ fontWeight: "bold" }}>
+          city
+        </Box>{" "}
+        and a{" "}
+        <Box component="span" sx={{ fontWeight: "bold" }}>
+          street
+        </Box>{" "}
+        name.
+      </Box>
+      <Box>
+        Example input:{" "}
+        <Box component="span" sx={{ fontWeight: "bold" }}>
+          Karlsruhe Moltkestr
+        </Box>
+      </Box>
       <LocationSearchAutocomplete
         label={LABEL_CONSTANTS.startLocation}
         selectedValue={props.selectedValueStartingLocation}
@@ -42,19 +59,22 @@ const MapWithSearchboxContainer = (props: Props) => {
         setSelectedValue={props.setSelectedValueEndLocation}
       />
       <MapComponent>
-        <MapCustomMarker
-          key={"start"}
-          label={LABEL_CONSTANTS.startLocation}
-          markerPointLocation={props.selectedValueStartingLocation?.point}
-          markerName={props.selectedValueStartingLocation?.name}
-        />
-        <MapCustomMarker
-          key={"end"}
-          label={LABEL_CONSTANTS.endLocation}
-          markerPointLocation={props.selectedValueEndLocation?.point}
-          markerName={props.selectedValueEndLocation?.name}
-        />
-
+        {/* {!routeFound && (
+          <MapCustomMarker
+            key={"start"}
+            label={LABEL_CONSTANTS.startLocation}
+            markerPointLocation={props.selectedValueStartingLocation?.point}
+            markerName={props.selectedValueStartingLocation?.name}
+          />
+        )}
+        {!routeFound && (
+          <MapCustomMarker
+            key={"end"}
+            label={LABEL_CONSTANTS.endLocation}
+            markerPointLocation={props.selectedValueEndLocation?.point}
+            markerName={props.selectedValueEndLocation?.name}
+          />
+        )} */}
         <MapRouting
           startPoint={props.selectedValueStartingLocation?.point}
           endPoint={props.selectedValueEndLocation?.point}

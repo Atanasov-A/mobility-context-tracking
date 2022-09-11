@@ -48,7 +48,10 @@ const LocationSearchAutocomplete = (props: Props) => {
           component="li"
           sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
           {...props}
-          key={option?.name + new Date().toLocaleDateString()}
+          key={
+            option?.name +
+            ("0".repeat(6) + Math.floor(Math.random() * 10 ** 6)).slice(-6)
+          }
         >
           <img
             loading="lazy"
