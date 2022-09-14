@@ -14,5 +14,5 @@ export const parseGraphHopperLocationName = (location: GraphhoperLocation) => {
   if (location.country != null) {
     name += ` ${location.country}`;
   }
-  return name;
+  return name ?? "";
 };
