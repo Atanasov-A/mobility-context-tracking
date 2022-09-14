@@ -1,8 +1,10 @@
+import { AccountCircle } from "@mui/icons-material";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import InsightsIcon from "@mui/icons-material/Insights";
 import MenuIcon from "@mui/icons-material/Menu";
+import { Menu, MenuItem } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
@@ -15,7 +17,10 @@ import Typography from "@mui/material/Typography";
 import moment from "moment";
 import "moment/locale/de";
 import * as React from "react";
+import { useNavigate } from "react-router-dom";
 import { RoutesComponent } from "../../routes/RoutesComponent";
+import { isTokenExpired } from "../../utils/tokenValidation";
+import { useAuthToken } from "../shared/hooks/useAuthToken";
 import { AppBar } from "./AppBar";
 import { DrawerHeader } from "./DrawerHeader";
 import { ListItemLink } from "./ListItemLink";
@@ -26,6 +31,34 @@ const drawerWidth = 240;
 function AppBarWithMainLayout() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { getToken, clearTokenStorage } = useAuthToken();
+  const navigate = useNavigate();
+
+  const authToken = getToken();
+
+  React.useEffect(() => {
+    if (authToken != null) {
+      if (isTokenExpired(authToken)) {
+        clearTokenStorage();
+        navigate("/login");
+      }
+    }
+  }, [authToken, clearTokenStorage, navigate]);
+
+  const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => {
+    clearTokenStorage();
+    handleClose();
+    navigate("/login");
+  };
 
   React.useEffect(() => {
     moment.locale("de");
@@ -40,10 +73,10 @@ function AppBarWithMainLayout() {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", flexGrow: 1 }}>
       <CssBaseline />
       <AppBar position="fixed" open={open}>
-        <Toolbar>
+        <Toolbar sx={{ flexGrow: 1 }}>
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -53,9 +86,32 @@ function AppBarWithMainLayout() {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             Mobi context tracking
           </Typography>
+          {authToken && (
+            <Box>
+              <IconButton
+                size="large"
+                aria-label="account of current user"
+                aria-controls="menu-appbar"
+                aria-haspopup="true"
+                onClick={handleMenu}
+                color="inherit"
+              >
+                <AccountCircle />
+              </IconButton>
+              <Menu
+                id="menu-appbar"
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+              >
+                <MenuItem onClick={handleLogout}>Logout</MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
       <Drawer
@@ -83,7 +139,7 @@ function AppBarWithMainLayout() {
         <Divider />
         <List>
           <ListItemLink
-            to="/"
+            to="/add-route"
             primary="Add activity"
             icon={<AddLocationAltIcon />}
           />

@@ -31,7 +31,7 @@ interface Props {
 const MapWithSearchboxContainer = (props: Props) => {
   return (
     <>
-      <Box>
+      <Box sx={{mt: 1}}>
         Please enter the location in the following format. A{" "}
         <Box component="span" sx={{ fontWeight: "bold" }}>
           city
@@ -42,7 +42,7 @@ const MapWithSearchboxContainer = (props: Props) => {
         </Box>{" "}
         name.
       </Box>
-      <Box>
+      <Box sx={{ mb: 3 }}>
         Example input:{" "}
         <Box component="span" sx={{ fontWeight: "bold" }}>
           Karlsruhe Moltkestr

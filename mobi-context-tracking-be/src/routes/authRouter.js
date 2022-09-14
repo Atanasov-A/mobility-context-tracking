@@ -12,7 +12,7 @@ authRouter.post(
   "/register",
   body("email").isEmail().normalizeEmail(),
   body("password").isLength({ min: 5 }),
-  body("password_repeat").custom((value, { req }) => {
+  body("passwordRepeat").custom((value, { req }) => {
     if (value !== req.body.password) {
       throw new Error("Password confirmation does not match password");
     }
@@ -96,20 +96,9 @@ authRouter.post("/login", (req, res, next) => {
           }
 
           if (bResult) {
-            // const token = jwt.sign(
-            //   {
-            //     email: result[0].email,
-            //   },
-            //   process.env.AUTH_SECRET_KEY,
-            //   {
-            //     expiresIn: "30d",
-            //   }
-            // );
-
             const token = signJwtToken(result[0].email);
 
             return res.status(200).send({
-              msg: "Logged in!",
               token,
             });
           }

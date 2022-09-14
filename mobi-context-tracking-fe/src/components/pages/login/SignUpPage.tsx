@@ -1,27 +1,101 @@
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
+import { AlertColor } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Grid from "@mui/material/Grid";
 import Link from "@mui/material/Link";
 import Typography from "@mui/material/Typography";
-import { FormEvent, useState } from "react";
+import { AxiosError } from "axios";
+import React, { FormEvent, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { registerUser } from "../../../api/server/auth/register";
+import { UserRegisterCredentials } from "../../../models/UserRegisterCredentials";
+import {
+  isEmailValid,
+  isPasswordRepeatValid,
+  isPasswordValid,
+  isSignUpValid,
+} from "../../../utils/validations";
+import { StyledAlert } from "../../shared/StyledAlert";
 import { StyledTextField } from "../../shared/StyledTextField";
 
 const SignUpPage = () => {
   const [userEmail, setUserEmail] = useState("");
+  const [emailValidationError, setEmailValidationError] = useState(false);
   const [password, setPassword] = useState("");
+  const [passwordValidationError, setPasswordValidationError] = useState(false);
+  const [passwordRepeat, setPasswordRepeat] = useState("");
+  const [passwordRepeatdValidationError, setPasswordRepeatValidationError] =
+    useState(false);
+  const [signUpValid, setSignUpValid] = useState(false);
+  const [showAlert, setShowAlert] = useState(false);
+  const [alertSeverity, setAlertSeverity] = useState<AlertColor>("success");
+  const [showAlertTitle, setShowAlertTitle] = useState("");
 
   const navigate = useNavigate();
 
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  useEffect(() => {
+    if (userEmail.length > 0) {
+      setEmailValidationError(!isEmailValid(userEmail));
+    }
+  }, [userEmail]);
+
+  useEffect(() => {
+    if (password.length > 0) {
+      console.log(isPasswordValid(password));
+      setPasswordValidationError(!isPasswordValid(password));
+    }
+  }, [password]);
+
+  useEffect(() => {
+    if (passwordRepeat.length > 0) {
+      setPasswordRepeatValidationError(
+        !isPasswordRepeatValid(password, passwordRepeat)
+      );
+    }
+  }, [passwordRepeat, password]);
+
+  useEffect(() => {
+    setSignUpValid(isSignUpValid(userEmail, password, passwordRepeat));
+  }, [userEmail, password, passwordRepeat]);
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
+
+    const userRegisterCredentials: UserRegisterCredentials = {
+      email: userEmail,
+      password: password,
+      passwordRepeat: passwordRepeat,
+    };
+
+    try {
+      const response = await registerUser(userRegisterCredentials);
+
+      setAlertSeverity("success");
+      setShowAlertTitle("Registration successfully");
+      setShowAlert(true);
+
+      clearForm();
+    } catch (error) {
+      setAlertSeverity("error");
+      const axiosError = error as AxiosError;
+      if (axiosError.response?.status === 409) {
+        setShowAlertTitle("Email already in use");
+      } else if (axiosError.response?.status === 400) {
+        setShowAlertTitle("Credentials are not valid");
+      } else {
+        setShowAlertTitle("Something went wrong. Try again later");
+      }
+      setShowAlert(true);
+    }
+  };
+
+  const clearForm = () => {
+    setUserEmail("");
+    setPassword("");
+    setPasswordRepeat("");
+    setTimeout(() => setShowAlert(false), 4000);
   };
 
   return (
@@ -39,30 +113,8 @@ const SignUpPage = () => {
       <Typography component="h1" variant="h5">
         Create account
       </Typography>
+
       <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 1 }}>
-        {/* <Grid container spacing={3}> */}
-        {/* <Grid item xs={12} sm={6}>
-            <TextField
-              autoComplete="given-name"
-              name="firstName"
-              required
-              fullWidth
-              id="firstName"
-              label="First Name"
-              autoFocus
-            />
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              required
-              fullWidth
-              id="lastName"
-              label="Last Name"
-              name="lastName"
-              autoComplete="family-name"
-            />
-          </Grid> */}
-        {/* <Grid item xs={12}> */}
         <StyledTextField
           margin="normal"
           required
@@ -71,23 +123,57 @@ const SignUpPage = () => {
           label="Email Address"
           name="email"
           autoComplete="email"
-          onChange={() => {}}
+          value={userEmail}
+          onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+            setUserEmail(event.target.value);
+          }}
+          error={emailValidationError}
+          helperText={emailValidationError ? "Incorrect email." : ""}
         />
-        {/* </Grid> */}
-        {/* <Grid item xs={12}> */}
-        <StyledTextField
-          margin="normal"
-          required
-          fullWidth
-          name="password"
-          label="Password"
-          type="password"
-          id="password"
-          autoComplete="new-password"
-        />
-        {/* </Grid> */}
-        {/* </Grid> */}
+        <Box>
+          <StyledTextField
+            margin="normal"
+            required
+            fullWidth
+            name="password"
+            label="Password"
+            type="password"
+            id="password"
+            autoComplete="new-password"
+            value={password}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setPassword(event.target.value);
+            }}
+            error={passwordValidationError}
+            helperText={
+              passwordValidationError
+                ? "Password must be at least 5 characters long."
+                : ""
+            }
+          />
+          <StyledTextField
+            margin="normal"
+            required
+            fullWidth
+            name="passwordRepeat"
+            label="Repeat password"
+            type="password"
+            id="passwordRepeat"
+            autoComplete="current-password"
+            value={passwordRepeat}
+            onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+              setPasswordRepeat(event.target.value);
+            }}
+            error={passwordRepeatdValidationError}
+            helperText={
+              passwordRepeatdValidationError
+                ? "Invalid confirmation password."
+                : ""
+            }
+          />
+        </Box>
         <Button
+          disabled={!signUpValid}
           type="submit"
           fullWidth
           variant="contained"
@@ -109,6 +195,12 @@ const SignUpPage = () => {
             </Link>
           </Grid>
         </Grid>
+
+        <StyledAlert
+          showAlert={showAlert}
+          alertTitle={showAlertTitle}
+          severity={alertSeverity}
+        />
       </Box>
     </Box>
   );
