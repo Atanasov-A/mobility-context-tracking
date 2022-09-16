@@ -133,8 +133,9 @@ const JourneyInformation = (props: Props) => {
               required
               fullWidth
               id="reason"
+              value={props.reasonForChosenTransport}
               label={LABEL_CONSTANTS.transportTypeReason}
-              name={props.reasonForChosenTransport}
+              name={LABEL_CONSTANTS.transportTypeReason}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
                 props.setReasonForChosenTransport(event.target.value);
               }}

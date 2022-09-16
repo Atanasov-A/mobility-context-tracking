@@ -11,6 +11,7 @@ export const findRoute = (
   endPointLat: number,
   endPointLon: number,
   mode: string
+  // walk, drive, transit (public transport), bicycle, scooter
 ) => {
   return geoapifyClient.get(
     `/routing?waypoints=${startPointLat},${startPointLon}|${endPointLat},${endPointLon}&mode=${mode}&${GEOAPIFY_API_PARAM_ROUTING}`

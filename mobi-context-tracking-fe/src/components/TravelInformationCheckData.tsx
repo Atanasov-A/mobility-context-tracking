@@ -1,10 +1,10 @@
 import { Box, Grid, Typography } from "@mui/material";
 import moment from "moment";
 import { LABEL_CONSTANTS } from "../constants/ComponentsLabels";
-import { GraphhoperLocationPoint } from "../models/GraphhoperLocationPoint";
+import { GeoapifyLocation } from "../models/GeoapifyLocation";
 import { displayDurationInMillisHumanReadable } from "../utils/dateHelpers";
+import { GeoapifyRouting } from "./map/GeoapifyRouting";
 import { MapComponent } from "./map/MapComponent";
-import { ReadOnlyMapRouting } from "./map/ReadOnlyMapRouting";
 
 interface Props {
   startDateValue: Date;
@@ -16,9 +16,10 @@ interface Props {
   startLocationName: string;
   endLocationName: string;
   travelDurationInMillis: number;
-  startLocationPoint: GraphhoperLocationPoint;
-  endLocationPoint: GraphhoperLocationPoint;
+  startLocation: GeoapifyLocation;
+  endLocation: GeoapifyLocation;
 }
+
 const TravelInformationCheckData = (props: Props) => {
   return (
     <Box
@@ -126,22 +127,9 @@ const TravelInformationCheckData = (props: Props) => {
       </Grid>
 
       <MapComponent>
-        {/* <MapCustomMarker
-          key={LABEL_CONSTANTS.startLocation}
-          label={LABEL_CONSTANTS.startLocation + " - "}
-          markerPointLocation={props.startLocationPoint}
-          markerName={props.startLocationName}
-        />
-        <MapCustomMarker
-          key={LABEL_CONSTANTS.endLocation}
-          label={LABEL_CONSTANTS.endLocation + " - "}
-          markerPointLocation={props.endLocationPoint}
-          markerName={props.endLocationName}
-        /> */}
-
-        <ReadOnlyMapRouting
-          startPoint={props.startLocationPoint}
-          endPoint={props.endLocationPoint}
+        <GeoapifyRouting
+          startLocation={props.startLocation}
+          endLocation={props.endLocation}
         />
       </MapComponent>
     </Box>

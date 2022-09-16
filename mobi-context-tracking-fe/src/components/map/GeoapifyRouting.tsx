@@ -1,4 +1,4 @@
-import L from "leaflet";
+import L, { LatLng } from "leaflet";
 import { useEffect } from "react";
 import { useMap } from "react-leaflet";
 import { findRoute } from "../../api/geoapify/routing/findRoute";
@@ -32,16 +32,20 @@ export const GeoapifyRouting = (props: Props) => {
 
       const startLocationMarker = createLeafletMarker(
         props.startLocation.lat,
-        props.startLocation.lon
+        props.startLocation.lon,
+        `Start location: ${props.startLocation.formatted}`
       );
       const endLocationMarker = createLeafletMarker(
         props.endLocation.lat,
-        props.endLocation.lon
+        props.endLocation.lon,
+        `End location: ${props.endLocation.formatted}`
       );
       layerGroupMarkers.addLayer(startLocationMarker);
       layerGroupMarkers.addLayer(endLocationMarker);
 
       layerGroupMarkers.addTo(map);
+
+      map.flyTo(new LatLng(props.startLocation.lat, props.startLocation.lon));
 
       findRoute(
         props.startLocation.lat,
