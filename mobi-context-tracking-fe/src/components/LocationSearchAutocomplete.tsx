@@ -27,14 +27,15 @@ const LocationSearchAutocomplete = (props: Props) => {
       }, 1000);
       return () => clearTimeout(fetch);
     }
-  }, [inputValue]);
+  }, [firstRender, inputValue]);
 
   const fetchLocation = async () => {
-    const suggestedLocations: GraphhoperLocation[] = (
-      await findLocationBySearchTerm(inputValue)
-    ).data.hits;
-
-    setAutocompleteOptions(suggestedLocations);
+    if (inputValue.trim().length > 1) {
+      const suggestedLocations: GraphhoperLocation[] = (
+        await findLocationBySearchTerm(inputValue)
+      ).data.hits;
+      setAutocompleteOptions(suggestedLocations);
+    }
   };
 
   return (
@@ -65,7 +66,7 @@ const LocationSearchAutocomplete = (props: Props) => {
         </Box>
       )}
       renderInput={(params) => <TextField {...params} label={props.label} />}
-      value={props.selectedValue}
+      value={props.selectedValue || null}
       onChange={(event: any, newValue: GraphhoperLocation | null) => {
         props.setSelectedValue(newValue);
       }}

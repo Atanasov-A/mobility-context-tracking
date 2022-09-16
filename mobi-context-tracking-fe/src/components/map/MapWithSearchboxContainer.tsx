@@ -6,6 +6,9 @@ import { LocationSearchAutocomplete } from "../LocationSearchAutocomplete";
 import { MapComponent } from "./MapComponent";
 import { MapRouting } from "./MapRouting";
 
+// https://www.npmjs.com/package/@geoapify/react-geocoder-autocomplete
+// geoapify
+
 interface Props {
   selectedValueStartingLocation: GraphhoperLocation;
   setSelectedValueStartingLocation: React.Dispatch<
