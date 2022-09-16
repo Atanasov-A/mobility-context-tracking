@@ -8,6 +8,11 @@ import { GraphhoperLocation } from "../../models/GraphhoperLocation";
 import { GraphhoperLocationPoint } from "../../models/GraphhoperLocationPoint";
 import { parseGraphHopperLocationName } from "../../utils/graphHopperLocationNameConverter";
 import { TravelInformationCheckData } from "../TravelInformationCheckData";
+import { SearchLocationAutocomplete } from "../SearchLocationAutocomplete";
+import { GeoapifyLocation } from "../../models/GeoapifyLocation";
+import { LABEL_CONSTANTS } from "../../constants/ComponentsLabels";
+import { MapComponent } from "../map/MapComponent";
+import { GeoapifyRouting } from "../map/GeoapifyRouting";
 
 const firstStep = 0;
 const lastStep = 1;
@@ -35,6 +40,9 @@ const CreateJourneyPage = () => {
     selectedValueEndLocationNameAfterMarkerDragged,
     setSelectedValueEndLocationNameAfterMarkerDragged,
   ] = useState<string>();
+
+  const [startLocation, setStartLocation] = useState<GeoapifyLocation | null>();
+  const [endLocation, setEndLocation] = useState<GeoapifyLocation | null>();
 
   const [startLocationName, setStartLocationName] = useState("");
   const [endLocationName, setEndLocationName] = useState("");
@@ -177,22 +185,40 @@ const CreateJourneyPage = () => {
       />
 
       {activeStep === firstStep && (
-        <MapWithSearchboxContainer
-          selectedValueStartingLocation={selectedValueStartingLocation}
-          setSelectedValueStartingLocation={setSelectedValueStartingLocation}
-          selectedValueEndLocation={selectedValueEndLocation}
-          setSelectedValueEndLocation={setSelectedValueEndLocation}
-          setNewStartPointAfterMarkerDragged={
-            setNewStartPointAfterMarkerDragged
-          }
-          setNewEndPointAfterMarkerDragged={setNewEndPointAfterMarkerDragged}
-          setSelectedValueStartingLocationNameAfterMarkerDragged={
-            setSelectedValueStartingLocationNameAfterMarkerDragged
-          }
-          setSelectedValueEndLocationNameAfterMarkerDragged={
-            setSelectedValueEndLocationNameAfterMarkerDragged
-          }
-        />
+        <>
+          <SearchLocationAutocomplete
+            label={LABEL_CONSTANTS.startLocation}
+            selectedValue={startLocation}
+            setSelectedValue={setStartLocation}
+          />
+          <SearchLocationAutocomplete
+            label={LABEL_CONSTANTS.endLocation}
+            selectedValue={endLocation}
+            setSelectedValue={setEndLocation}
+          />
+          <MapComponent>
+            <GeoapifyRouting
+              startLocation={startLocation}
+              endLocation={endLocation}
+            />
+          </MapComponent>
+        </>
+        // <MapWithSearchboxContainer
+        //   selectedValueStartingLocation={selectedValueStartingLocation}
+        //   setSelectedValueStartingLocation={setSelectedValueStartingLocation}
+        //   selectedValueEndLocation={selectedValueEndLocation}
+        //   setSelectedValueEndLocation={setSelectedValueEndLocation}
+        //   setNewStartPointAfterMarkerDragged={
+        //     setNewStartPointAfterMarkerDragged
+        //   }
+        //   setNewEndPointAfterMarkerDragged={setNewEndPointAfterMarkerDragged}
+        //   setSelectedValueStartingLocationNameAfterMarkerDragged={
+        //     setSelectedValueStartingLocationNameAfterMarkerDragged
+        //   }
+        //   setSelectedValueEndLocationNameAfterMarkerDragged={
+        //     setSelectedValueEndLocationNameAfterMarkerDragged
+        //   }
+        // />
       )}
       {activeStep === lastStep && (
         <JourneyInformation
