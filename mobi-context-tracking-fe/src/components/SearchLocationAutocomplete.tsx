@@ -32,42 +32,44 @@ const SearchLocationAutocomplete = (props: Props) => {
   };
 
   return (
-    <Autocomplete
-      filterOptions={(x) => x}
-      freeSolo
-      options={autocompleteOptions}
-      getOptionLabel={(option: GeoapifyLocation) => option.formatted}
-      renderOption={(props, option) => (
-        <Box
-          component="li"
-          sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
-          {...props}
-          key={
-            option.place_id ??
-            ("0".repeat(6) + Math.floor(Math.random() * 10 ** 6)).slice(-6)
-          }
-        >
-          <img
-            loading="lazy"
-            width="20"
-            src={`https://flagcdn.com/w20/${option.country_code.toLowerCase()}.png`}
-            srcSet={`https://flagcdn.com/w40/${option.country_code.toLowerCase()}.png 2x`}
-            alt=""
-          />
-          {option.formatted}
-        </Box>
-      )}
-      renderInput={(params) => <TextField {...params} label={props.label} />}
-      value={props.selectedValue || null}
-      onChange={(event: any, newValue: GeoapifyLocation | null) => {
-        props.setSelectedValue(newValue);
-      }}
-      inputValue={inputValue}
-      onInputChange={(event, newInputValue) => {
-        setInputValue(newInputValue);
-      }}
-      sx={{ mb: 3 }}
-    />
+    <>
+      <Autocomplete
+        filterOptions={(x) => x}
+        freeSolo
+        options={autocompleteOptions}
+        getOptionLabel={(option: GeoapifyLocation) => option.formatted}
+        renderOption={(props, option) => (
+          <Box
+            component="li"
+            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+            {...props}
+            key={
+              option.place_id ??
+              ("0".repeat(6) + Math.floor(Math.random() * 10 ** 6)).slice(-6)
+            }
+          >
+            <img
+              loading="lazy"
+              width="20"
+              src={`https://flagcdn.com/w20/${option.country_code.toLowerCase()}.png`}
+              srcSet={`https://flagcdn.com/w40/${option.country_code.toLowerCase()}.png 2x`}
+              alt=""
+            />
+            {option.formatted}
+          </Box>
+        )}
+        renderInput={(params) => <TextField {...params} label={props.label} />}
+        value={props.selectedValue || null}
+        onChange={(event: any, newValue: GeoapifyLocation | null) => {
+          props.setSelectedValue(newValue);
+        }}
+        inputValue={inputValue}
+        onInputChange={(event, newInputValue) => {
+          setInputValue(newInputValue);
+        }}
+        sx={{ mb: 3 }}
+      />
+    </>
   );
 };
 

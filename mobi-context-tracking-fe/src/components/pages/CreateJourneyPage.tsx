@@ -1,12 +1,19 @@
+import moment from "moment";
 import { useEffect, useState } from "react";
 import { LABEL_CONSTANTS } from "../../constants/ComponentsLabels";
+import { getTransportTypeKeyByValue } from "../../models/enums/TransportTypeEnum";
+import { getTravelPurposeKeyByValue } from "../../models/enums/TravelPurposeEnum";
+import { getWeatherKeyByValue } from "../../models/enums/WeatherEnum";
 import { GeoapifyLocation } from "../../models/GeoapifyLocation";
+import { RouteInformation } from "../../models/RouteInformation";
 import { calculateDifferenceBetweenDatesInMillis } from "../../utils/dateHelpers";
 import { HorizontalLinearStepper } from "../HorizontalLinearStepper";
 import { JourneyInformation } from "../JourneyInformation";
+import { LocationSearchHelperText } from "../LocationSearchHelperText";
 import { GeoapifyRouting } from "../map/GeoapifyRouting";
 import { MapComponent } from "../map/MapComponent";
 import { SearchLocationAutocomplete } from "../SearchLocationAutocomplete";
+import { StyledAlert } from "../shared/StyledAlert";
 import { TravelInformationCheckData } from "../TravelInformationCheckData";
 
 const firstStep = 0;
@@ -35,10 +42,11 @@ const CreateJourneyPage = () => {
   const [selectedWeatherValues, setSelectedWeatherValues] = useState<string[]>(
     []
   );
-  const [selectedTransportValues, setSelectedTransportValues] = useState<
-    string[]
-  >([]);
+  const [selectedTransportValue, setSelectedTransportValue] =
+    useState<string>();
   const [transportTypeReason, setTransportTypeReason] = useState<string>("");
+
+  const [showAlertNoRouteFound, setShowAlertNoRouteFound] = useState(false);
 
   useEffect(() => {
     if (
@@ -91,7 +99,7 @@ const CreateJourneyPage = () => {
         endDateValue == null ||
         selectedTravelPurposeValues.length === 0 ||
         selectedWeatherValues.length === 0 ||
-        selectedTransportValues.length === 0 ||
+        selectedTransportValue.trim() === "" ||
         transportTypeReason.trim() === "" ||
         startLocationName.trim() === "" ||
         endLocationName.trim() === ""
@@ -107,9 +115,6 @@ const CreateJourneyPage = () => {
 
   const handleNext = () => {
     const validStep = isStepValid(activeStep);
-    if (activeStep > lastStep) {
-      // Save the data
-    }
     if (validStep) {
       setActiveStep((prevActiveStep) => prevActiveStep + 1);
     }
@@ -119,7 +124,28 @@ const CreateJourneyPage = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleOnComplete = () => {};
+  const handleOnComplete = () => {
+    const travelPurposeEnumList = selectedTravelPurposeValues.map((tpv) =>
+      getTravelPurposeKeyByValue(tpv)
+    );
+    const weatherEnumList = selectedWeatherValues.map((sw) =>
+      getWeatherKeyByValue(sw)
+    );
+
+    const routeInformationObject: RouteInformation = {
+      startLocationName: startLocationName,
+      endLocationName: endLocationName,
+      startLocationPoint: { lat: startLocation.lat, lon: startLocation.lon },
+      endLocationPoint: { lat: endLocation.lat, lon: endLocation.lon },
+      startDate: moment(startDateValue).format("YYYY-MM-DD HH:mm:ss"),
+      endDate: moment(endDateValue).format("YYYY-MM-DD HH:mm:ss"),
+      travelPurposeList: travelPurposeEnumList,
+      weatherList: weatherEnumList,
+      transportType: getTransportTypeKeyByValue(selectedTransportValue),
+      reasonForTransport: transportTypeReason,
+    };
+    console.log("on complete", routeInformationObject);
+  };
 
   return (
     <>
@@ -135,6 +161,7 @@ const CreateJourneyPage = () => {
 
       {activeStep === firstStep && (
         <>
+          <LocationSearchHelperText />
           <SearchLocationAutocomplete
             label={LABEL_CONSTANTS.startLocation}
             selectedValue={startLocation}
@@ -145,10 +172,17 @@ const CreateJourneyPage = () => {
             selectedValue={endLocation}
             setSelectedValue={setEndLocation}
           />
+          <StyledAlert
+            showAlert={showAlertNoRouteFound}
+            alertTitle={"The route you are looking for has not been found."}
+            severity="info"
+          />
+
           <MapComponent>
             <GeoapifyRouting
               startLocation={startLocation}
               endLocation={endLocation}
+              setShowAlertNoRouteFound={setShowAlertNoRouteFound}
             />
           </MapComponent>
         </>
@@ -163,8 +197,8 @@ const CreateJourneyPage = () => {
           setSelectedTravelPurposeValues={setSelectedTravelPurposeValues}
           selectedWeatherValues={selectedWeatherValues}
           setSelectedWeatherValues={setSelectedWeatherValues}
-          selectedTransportValues={selectedTransportValues}
-          setSelectedTransportValues={setSelectedTransportValues}
+          selectedTransportValue={selectedTransportValue}
+          setSelectedTransportValue={setSelectedTransportValue}
           reasonForChosenTransport={transportTypeReason}
           setReasonForChosenTransport={setTransportTypeReason}
           travelDurationInMillis={travelDurationInMillis}
@@ -183,7 +217,7 @@ const CreateJourneyPage = () => {
           travelDurationInMillis={travelDurationInMillis}
           travelPurposeValues={selectedTravelPurposeValues}
           weatherValues={selectedWeatherValues}
-          transportValues={selectedTransportValues}
+          transportValue={selectedTransportValue}
           transportTypeReason={transportTypeReason}
           startLocation={startLocation}
           endLocation={endLocation}

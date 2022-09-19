@@ -1,5 +1,4 @@
 import { Alert, AlertProps, AlertTitle } from "@mui/material";
-import { useEffect, useState } from "react";
 
 interface Props {
   showAlert: boolean;
@@ -9,7 +8,6 @@ interface Props {
 
 const StyledAlert = (props: Props & AlertProps) => {
   const { alertMessage, alertTitle, showAlert, ...rest } = props;
-  const [isVisible, setIsVisible] = useState(showAlert);
 
   return (
     <>

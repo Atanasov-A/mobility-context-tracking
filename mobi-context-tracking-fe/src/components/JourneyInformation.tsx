@@ -7,6 +7,7 @@ import { WeatherEnum } from "../models/enums/WeatherEnum";
 import { displayDurationInMillisHumanReadable } from "../utils/dateHelpers";
 import { CustomDateTimePicker } from "./shared/CustomDateTimePicker";
 import { MultiSelectDropdown } from "./shared/MultiSelectDropdown";
+import { SelectDropdown } from "./shared/SelectDropdown";
 
 interface Props {
   startDateValue: Date;
@@ -17,8 +18,8 @@ interface Props {
   setSelectedTravelPurposeValues: Dispatch<SetStateAction<string[]>>;
   selectedWeatherValues: string[];
   setSelectedWeatherValues: Dispatch<SetStateAction<string[]>>;
-  selectedTransportValues: string[];
-  setSelectedTransportValues: Dispatch<SetStateAction<string[]>>;
+  selectedTransportValue: string;
+  setSelectedTransportValue: Dispatch<SetStateAction<string>>;
   reasonForChosenTransport: string;
   setReasonForChosenTransport: Dispatch<SetStateAction<string>>;
   travelDurationInMillis: number | null;
@@ -121,11 +122,11 @@ const JourneyInformation = (props: Props) => {
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
           <Grid item xs={12} md={6}>
-            <MultiSelectDropdown
+            <SelectDropdown
               label={LABEL_CONSTANTS.transportType}
               dropdownValues={Object.values(TransportTypeEnum)}
-              selectedDropdownValues={props.selectedTransportValues}
-              setSelectedDropdownValues={props.setSelectedTransportValues}
+              selectedDropdownValue={props.selectedTransportValue}
+              setSelectedDropdownValue={props.setSelectedTransportValue}
             />
           </Grid>
           <Grid item xs={12} md={6}>

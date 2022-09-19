@@ -11,7 +11,7 @@ interface Props {
   endDateValue: Date;
   travelPurposeValues: string[];
   weatherValues: string[];
-  transportValues: string[];
+  transportValue: string;
   transportTypeReason: string;
   startLocationName: string;
   endLocationName: string;
@@ -110,7 +110,7 @@ const TravelInformationCheckData = (props: Props) => {
               {LABEL_CONSTANTS.transportType}
             </Typography>
             <Typography variant="subtitle2" gutterBottom>
-              {props.transportValues.join(", ")}
+              {props.transportValue}
             </Typography>
           </Box>
         </Grid>

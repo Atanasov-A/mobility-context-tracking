@@ -9,6 +9,7 @@ import { createLeafletMarker } from "../../utils/mapUtils";
 interface Props {
   startLocation: GeoapifyLocation;
   endLocation: GeoapifyLocation;
+  setShowAlertNoRouteFound?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const GeoapifyRouting = (props: Props) => {
@@ -52,7 +53,7 @@ export const GeoapifyRouting = (props: Props) => {
         props.startLocation.lon,
         props.endLocation.lat,
         props.endLocation.lon,
-        "transit"
+        "drive"
       )
         .then((result) => {
           const route = result.data.features[0];
@@ -60,8 +61,15 @@ export const GeoapifyRouting = (props: Props) => {
 
           layerGroupRoutes.addLayer(routeLayer);
           layerGroupRoutes.addTo(map);
+          if (props.setShowAlertNoRouteFound != null) {
+            props.setShowAlertNoRouteFound(false);
+          }
         })
-        .catch((error) => {});
+        .catch((error) => {
+          if (props.setShowAlertNoRouteFound != null) {
+            props.setShowAlertNoRouteFound(true);
+          }
+        });
     }
   }, [map, props]);
 

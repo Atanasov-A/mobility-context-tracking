@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import { CreateJourneyPage } from "../components/pages/CreateJourneyPage";
 import { SignInPage } from "../components/pages/login/SignInPage";
 import { SignUpPage } from "../components/pages/login/SignUpPage";
@@ -23,6 +23,15 @@ const RoutesComponent = () => {
           element={
             <ProtectedRoute>
               <div>Saved routes </div>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/"
+          element={
+            <ProtectedRoute>
+              <Navigate replace to="/add-route" />
             </ProtectedRoute>
           }
         />

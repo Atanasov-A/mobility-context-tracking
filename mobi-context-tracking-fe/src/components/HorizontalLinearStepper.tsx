@@ -23,8 +23,8 @@ interface Props {
 
 const HorizontalLinearStepper = (props: Props) => {
   return (
-    <Box sx={{ width: "100%", mb: 2 }}>
-      <Stepper activeStep={props.activeStep}>
+    <Box sx={{ width: "100%" }}>
+      <Stepper activeStep={props.activeStep} sx={{mb: 2}}>
         {steps.map((label, index) => {
           const stepProps: { completed?: boolean } = {};
           const labelProps: {
@@ -55,11 +55,10 @@ const HorizontalLinearStepper = (props: Props) => {
             sx={{
               display: "flex",
               flexDirection: "column",
-              pt: 1,
               alignItems: "center",
             }}
           >
-            <Typography sx={{ mt: 2, mb: 1 }}>All steps completed!</Typography>
+            <Typography sx={{ mb: 1 }}>All steps completed!</Typography>
           </Box>
 
           <Box sx={{ display: "flex", flexDirection: "row" }}>
@@ -77,9 +76,7 @@ const HorizontalLinearStepper = (props: Props) => {
         </React.Fragment>
       ) : (
         <React.Fragment>
-          <Typography sx={{ mt: 2, mb: 1 }}>
-            Step {props.activeStep + 1}
-          </Typography>
+          <Typography sx={{ mb: 1 }}>Step {props.activeStep + 1}</Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Button
               color="inherit"
