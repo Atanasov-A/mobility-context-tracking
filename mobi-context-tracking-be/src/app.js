@@ -9,6 +9,7 @@ var bodyParser = require("body-parser");
 // routes
 const router = require("./routes/router.js");
 const authRouter = require("./routes/authRouter.js");
+const mobilityActivityRouter = require("./routes/mobilityActivityRouter.js");
 
 const port = 3090;
 var app = express();
@@ -26,7 +27,7 @@ app.use(express.json());
 app.use(cors());
 
 // add routes
-app.use("/api", router);
+app.use("/api", mobilityActivityRouter);
 app.use("/", authRouter);
 
 app.get("*", (req, res) => {
