@@ -51,24 +51,23 @@ CREATE TABLE IF NOT EXISTS weather
 
 CREATE TABLE IF NOT EXISTS transport_types
 (
-    id                        int(11)      NOT NULL AUTO_INCREMENT,
-    transport_type            varchar(255) NOT NULL,
-    reason_for_transport_type TEXT,
-    created_date              datetime,
+    id             int(11)      NOT NULL AUTO_INCREMENT,
+    transport_name varchar(255) NOT NULL,
     PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS mobility_activity
 (
-    id                int(11)  NOT NULL AUTO_INCREMENT,
-    route_id          int      NOT NULL,
-    weather_id        int      NOT NULL,
-    travel_purpose_id INT      NOT NULL,
-    transport_type_id INT      NOT NULL,
-    user_id           INT      NOT NULL,
-    start_time        DATETIME NOT NULL,
-    end_time          DATETIME NOT NULL,
-    created_date      datetime,
+    id                        int(11)  NOT NULL AUTO_INCREMENT,
+    route_id                  int      NOT NULL,
+    weather_id                int      NOT NULL,
+    travel_purpose_id         INT      NOT NULL,
+    transport_type_id         INT      NOT NULL,
+    user_id                   INT      NOT NULL,
+    start_time                DATETIME NOT NULL,
+    end_time                  DATETIME NOT NULL,
+    reason_for_transport_type TEXT,
+    created_date              datetime,
     PRIMARY KEY (id),
     FOREIGN KEY (route_id) REFERENCES routes (id)
         ON DELETE CASCADE
@@ -87,4 +86,9 @@ CREATE TABLE IF NOT EXISTS mobility_activity
         ON UPDATE CASCADE
 );
 
-
+INSERT INTO transport_types(transport_name)
+VALUES ('car'),
+       ('bike'),
+       ('walking'),
+       ('long_distance_train'),
+       ('public_transport');
