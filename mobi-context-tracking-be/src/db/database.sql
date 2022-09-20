@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS transport_types
     PRIMARY KEY (id)
 );
 
-CREATE TABLE IF NOT EXISTS mobility_activity
+CREATE TABLE IF NOT EXISTS mobility_activities
 (
     id                        int(11)  NOT NULL AUTO_INCREMENT,
     route_id                  int      NOT NULL,
