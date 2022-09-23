@@ -53,4 +53,28 @@ const useAuthToken = () => {
   };
 };
 
+export const getTokenFromTheStorage = (): string | null => {
+  const sessionStorageTokenString = sessionStorage.getItem("token") as
+    | string
+    | null;
+  if (
+    sessionStorageTokenString != null &&
+    sessionStorageTokenString.trim() !== ""
+  ) {
+    return sessionStorageTokenString;
+  }
+
+  const localStorageTokenString = localStorage.getItem("token") as
+    | string
+    | null;
+
+  if (
+    localStorageTokenString != null &&
+    localStorageTokenString.trim() !== ""
+  ) {
+    return localStorageTokenString;
+  }
+  return null;
+};
+
 export { useAuthToken };

@@ -12,6 +12,10 @@ const {
 const User = require("../db/users/User");
 const MobilityActivity = require("../db/mobility-activities/MobilityActivity");
 const { convertDateFromIsoString } = require("../utils/dateUtils");
+const { isLoggedIn } = require("../middleware/isLoggedIn");
+const {
+  getOverallStatisticTransportType,
+} = require("../db/mobility-activities/overallStatistics");
 
 mobilityActivityRouter.post(
   "/add-mobility-activity",
@@ -94,5 +98,12 @@ mobilityActivityRouter.post(
     }
   }
 );
+
+mobilityActivityRouter.get("/overall-statistics-tt", async (req, res) => {
+  const statisticTtData = await getOverallStatisticTransportType();
+  console.log("s", statisticTtData);
+
+  res.status(200).send(statisticTtData);
+});
 
 module.exports = mobilityActivityRouter;

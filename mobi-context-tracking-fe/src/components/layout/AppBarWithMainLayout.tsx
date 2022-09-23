@@ -2,8 +2,9 @@ import { AccountCircle } from "@mui/icons-material";
 import AddLocationAltIcon from "@mui/icons-material/AddLocationAlt";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
-import InsightsIcon from "@mui/icons-material/Insights";
+import LeaderboardIcon from "@mui/icons-material/Leaderboard";
 import MenuIcon from "@mui/icons-material/Menu";
+import PieChartIcon from "@mui/icons-material/PieChart";
 import { Menu, MenuItem } from "@mui/material";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -144,9 +145,14 @@ function AppBarWithMainLayout() {
             icon={<AddLocationAltIcon />}
           />
           <ListItemLink
-            to="/saved-routes"
-            primary="My routes"
-            icon={<InsightsIcon />}
+            to="/overall-statistics"
+            primary="Overall statistics"
+            icon={<PieChartIcon />}
+          />
+          <ListItemLink
+            to="/personal-statistics"
+            primary="Personal statistics"
+            icon={<LeaderboardIcon />}
           />
         </List>
       </Drawer>

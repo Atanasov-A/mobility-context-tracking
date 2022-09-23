@@ -1,3 +1,9 @@
+const {
+  transportTypeEnumList,
+} = require("../../models/enums/TransportTypeEnum");
+const {
+  travelPurposeEnumList,
+} = require("../../models/enums/TravelPurposeEnum");
 const dbConnection = require("../db");
 
 const MOBILITY_ACTIVITY_TYPE_TABLE_NAME = "mobility_activities";
@@ -36,6 +42,57 @@ class MobilityActivity {
     end_time='${newMobilityActivity.endTime}',
     reason_for_transport_type='${newMobilityActivity.reasonForTransport}',
     created_date=now();`;
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
+
+  static async getSavedMobilityActivitiesCount() {
+    const query = `SELECT COUNT(id) as totalCount from mobility_activities;`;
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
+
+  static async getTransportTypeCount(transportTypeName) {
+    const selectedTransportTypeIndex = transportTypeEnumList.findIndex(
+      (tt) => tt === transportTypeName
+    );
+    if (selectedTransportTypeIndex === -1) {
+      throw new Error("Invalid transport type");
+    }
+    const selectedTransportTypeId = selectedTransportTypeIndex + 1;
+    const query = `SELECT COUNT(id) as selectedTransportCount FROM mobility_activities 
+    WHERE transport_type_id = ${selectedTransportTypeId};`;
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
+
+  static getTravelPurposeCount(travelPurposeName) {
+    const travelPurposeNameLowerCase = travelPurposeName.toLowerCase();
+    const selectedTravelPurposeIndex = travelPurposeEnumList.findIndex(
+      tp === travelPurposeNameLowerCase
+    );
+    if (selectedTravelPurposeIndex === -1) {
+      throw new Error("Invalid travelPurpose type");
+    }
+
+    const query = `SELECT COUNT(*) as selectedTravelPurposeCount FROM mobility_activities ma 
+    INNER JOIN travel_purposes tp ON ma.travel_purpose_id = tp.id
+     WHERE tp.${travelPurposeNameLowerCase} = true`;
 
     return new Promise((resolve, reject) => {
       dbConnection.query(query, function (error, results, fields) {
