@@ -1,4 +1,10 @@
-const { body, validationResult } = require("express-validator");
+const {
+  body,
+  validationResult,
+  param,
+  query,
+  check,
+} = require("express-validator");
 const {
   transportTypeEnumList,
 } = require("../../models/enums/TransportTypeEnum");

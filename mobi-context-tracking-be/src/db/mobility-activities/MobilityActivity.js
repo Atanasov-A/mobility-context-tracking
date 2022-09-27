@@ -101,6 +101,26 @@ class MobilityActivity {
       });
     });
   }
+
+  static getTransportTypeCountByMonth(transportTypeName, monthNumber) {
+    const selectedTransportTypeIndex = transportTypeEnumList.findIndex(
+      (tt) => tt === transportTypeName
+    );
+
+    if (selectedTransportTypeIndex === -1) {
+      throw new Error("Invalid transport type");
+    }
+    const selectedTransportTypeId = selectedTransportTypeIndex + 1;
+    const query = `SELECT COUNT(id) as selectedTransportCount FROM mobility_activities 
+    WHERE transport_type_id = ${selectedTransportTypeId} AND MONTH(start_time) = ${monthNumber};`;
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
 }
 
 module.exports = MobilityActivity;

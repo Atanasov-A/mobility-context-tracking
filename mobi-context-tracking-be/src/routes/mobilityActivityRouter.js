@@ -15,7 +15,11 @@ const { convertDateFromIsoString } = require("../utils/dateUtils");
 const { isLoggedIn } = require("../middleware/isLoggedIn");
 const {
   getOverallStatisticTransportType,
+  getOverallStatisticTransportTypeByMonth,
+  getOverallStatisticWeatherTransportType,
 } = require("../db/mobility-activities/overallStatistics");
+const { transportTypeEnumList } = require("../models/enums/TransportTypeEnum");
+const { getTransportTypeId } = require("../utils/getTransportTypeId");
 
 mobilityActivityRouter.post(
   "/add-mobility-activity",
@@ -99,11 +103,53 @@ mobilityActivityRouter.post(
   }
 );
 
-mobilityActivityRouter.get("/overall-statistics-tt", async (req, res) => {
-  const statisticTtData = await getOverallStatisticTransportType();
-  console.log("s", statisticTtData);
+mobilityActivityRouter.get(
+  "/overall-statistics-transport-type",
+  async (req, res) => {
+    const statisticTtData = await getOverallStatisticTransportType();
+    res.status(200).send(statisticTtData);
+  }
+);
 
-  res.status(200).send(statisticTtData);
-});
+mobilityActivityRouter.get(
+  "/overall-statistics-transport-type-comparision",
+  async (req, res) => {
+    const firstTransportTypeName = req.query.firstTransportTypeName;
+    const secondTransportTypeName = req.query.secondTransportTypeName;
+    const isFirstParamValid = transportTypeEnumList.includes(
+      firstTransportTypeName
+    );
+    const isSecondParamValid = transportTypeEnumList.includes(
+      secondTransportTypeName
+    );
+
+    if (!isFirstParamValid || !isSecondParamValid) {
+      return res.status(400).send();
+    }
+
+    const statisticTtData = await getOverallStatisticTransportTypeByMonth(
+      firstTransportTypeName,
+      secondTransportTypeName
+    );
+    res.status(200).send(statisticTtData);
+  }
+);
+
+mobilityActivityRouter.get(
+  "/overall-statistics-transport-type-weather",
+  async (req, res) => {
+    const transportTypeName = req.query.transportTypeName;
+
+    const transportTypeId = getTransportTypeId(transportTypeName);
+    if (transportTypeId === -1) {
+      return res.status(400).send();
+    }
+
+    const statisticData = await getOverallStatisticWeatherTransportType(
+      transportTypeName
+    );
+    res.status(200).send(statisticData);
+  }
+);
 
 module.exports = mobilityActivityRouter;
