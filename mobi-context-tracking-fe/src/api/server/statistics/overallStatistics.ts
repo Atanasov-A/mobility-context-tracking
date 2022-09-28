@@ -1,3 +1,4 @@
+import { TransportTypeEnum } from "./../../../models/enums/TransportTypeEnum";
 import { WeatherCountDto } from "./../../../models/dto/WeatherCountDto";
 import { TransportTypeUsageDto } from "../../../models/dto/TransportTypeStatisticDto";
 import { TransportTypeUsageMonthDto } from "../../../models/dto/TransportTypeUsageMonthDto";
@@ -9,14 +10,19 @@ export const getOverallStatisticsTransportType = () => {
   );
 };
 
-export const getOverallStatisticsTransportTypeComparsionByMonth = () => {
+export const getOverallStatisticsTransportTypeComparsionByMonth = (
+  firstTransportType: TransportTypeEnum,
+  secondTransportType: TransportTypeEnum
+) => {
   return serverClient.get<TransportTypeUsageMonthDto>(
-    "/api/overall-statistics-transport-type-comparision?firstTransportTypeName=car&secondTransportTypeName=bike"
+    `/api/overall-statistics-transport-type-comparision?firstTransportTypeName=${firstTransportType.toLowerCase()}&secondTransportTypeName=${secondTransportType.toLocaleLowerCase()}`
   );
 };
 
-export const getOverallStatisticsTransportTypeByWeather = () => {
+export const getOverallStatisticsTransportTypeByWeather = (
+  transportTypeName: TransportTypeEnum
+) => {
   return serverClient.get<WeatherCountDto>(
-    "/api/overall-statistics-transport-type-weather?transportTypeName=bike"
+    `/api/overall-statistics-transport-type-weather?transportTypeName=${transportTypeName.toLowerCase()}`
   );
 };

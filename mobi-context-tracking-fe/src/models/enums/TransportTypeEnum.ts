@@ -11,7 +11,7 @@ export enum TransportTypeEnum {
   WALKING = "walking",
   PUBLIC_TRANSPORT = "public transport",
   CAR = "car",
-  LONG_DITANCE_TRAIN = "long distance train",
+  LONG_DISTANCE_TRAIN = "long distance train",
 }
 
 export const getTransportTypeKeyByValue = (value: string) => {

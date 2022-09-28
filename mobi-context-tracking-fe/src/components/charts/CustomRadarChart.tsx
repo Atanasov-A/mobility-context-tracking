@@ -1,14 +1,16 @@
-import React from "react";
+import { Box, Stack, Typography, useMediaQuery } from "@mui/material";
 import {
   Chart as ChartJS,
-  RadialLinearScale,
-  PointElement,
-  LineElement,
   Filler,
-  Tooltip,
   Legend,
+  LineElement,
+  PointElement,
+  RadialLinearScale,
+  Tooltip,
 } from "chart.js";
+import { useEffect, useState } from "react";
 import { Radar } from "react-chartjs-2";
+import { theme } from "../theme/CustomTheme";
 
 ChartJS.register(
   RadialLinearScale,
@@ -18,6 +20,17 @@ ChartJS.register(
   Tooltip,
   Legend
 );
+
+interface RadarChartDataObj {
+  labels: string[];
+  datasets: {
+    label: string;
+    data: number[];
+    backgroundColor: string;
+    borderColor: string;
+    borderWidth: number;
+  }[];
+}
 
 export const data = {
   labels: ["Thing 1", "Thing 2", "Thing 3", "Thing 4", "Thing 5", "Thing 6"],
@@ -32,23 +45,142 @@ export const data = {
   ],
 };
 
-const options = {
+const optionsDesktop = {
   scales: {
     r: {
       min: 0,
       max: 100,
       beginAtZero: true,
-      //   angleLines: {
-      //     color: "lightred"
-      //   }
+      pointLabels: {
+        font: {
+          size: 20,
+        },
+      },
+    },
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: "bottom" as const,
+      labels: {
+        font: {
+          size: 18,
+          family: "sans-serif",
+        },
+      },
+    },
+    tooltip: {
+      bodyFont: {
+        size: 16,
+        family: "sans-serif",
+      },
+      callbacks: {
+        label: (toolTipItem) => toolTipItem.formattedValue + "%",
+      },
     },
   },
 };
 
-const CustomRadarChart = () => {
+const optionsMobile = {
+  scales: {
+    r: {
+      min: 0,
+      max: 100,
+      beginAtZero: true,
+      pointLabels: {
+        font: {
+          size: 10,
+        },
+      },
+    },
+  },
+  responsive: true,
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: "bottom" as const,
+      labels: {
+        font: {
+          size: 16,
+          family: "sans-serif",
+        },
+      },
+    },
+    tooltip: {
+      bodyFont: {
+        size: 10,
+        family: "sans-serif",
+      },
+      callbacks: {
+        label: (toolTipItem) => toolTipItem.formattedValue + "%",
+      },
+    },
+  },
+};
+
+interface Props {
+  labels: string[];
+  label: string;
+  values: number[];
+  title?: string;
+}
+
+const bgColor = "rgba(98, 94, 243, 0.7)";
+const borderColor = "rgba(98, 94, 243, 1)";
+
+const smartphoneHeight = 400;
+const desktopHeight = 850;
+
+const CustomRadarChart = (props: Props) => {
+  const [chartData, setChartData] = useState<RadarChartDataObj | null>();
+  const isBiggerThanSmartphone = useMediaQuery(theme.breakpoints.up("sm"));
+  const [options, setOptions] = useState(optionsDesktop);
+  const [height, setHeight] = useState(desktopHeight);
+
+  useEffect(() => {
+    if (isBiggerThanSmartphone) {
+      setOptions(optionsDesktop);
+      setHeight(desktopHeight);
+    } else {
+      setOptions(optionsMobile);
+      setHeight(smartphoneHeight);
+    }
+  }, [isBiggerThanSmartphone]);
+
+  useEffect(() => {
+    const dataObj = {
+      labels: props.labels,
+      datasets: [
+        {
+          label: props.label,
+          data: props.values,
+          backgroundColor: bgColor,
+          borderColor: borderColor,
+          borderWidth: 1,
+        },
+      ],
+    };
+    setChartData(dataObj);
+  }, [props]);
   return (
     <>
-      <Radar data={data} options={options} />
+      <Box sx={{ mb: 3 }}>
+        <Stack
+          direction="row"
+          justifyContent="center"
+          alignItems="center"
+          spacing={1}
+          sx={{ mb: 2 }}
+        >
+          <Typography variant="h4">
+            {props.title != null ? props.title : ""}
+          </Typography>
+        </Stack>
+        <Box sx={{ minHeight: height }}>
+          {chartData != null && <Radar data={chartData} options={options} />}
+        </Box>
+      </Box>
     </>
   );
 };

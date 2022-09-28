@@ -59,37 +59,40 @@ const getOverallStatisticTransportTypeByMonth = async (
   secondTransportTypeName
 ) => {
   let tempJsonObject = {};
-  const carResults = await MobilityActivity.getTransportTypeCount(
+  const firstVehicleResults = await MobilityActivity.getTransportTypeCount(
     firstTransportTypeName
   );
-  const carUsageCount = carResults[0].selectedTransportCount;
-  const bikeResults = await MobilityActivity.getTransportTypeCount(
+  const carUsageCount = firstVehicleResults[0].selectedTransportCount;
+  const secondVehicleResults = await MobilityActivity.getTransportTypeCount(
     secondTransportTypeName
   );
-  const bikeUsageCount = bikeResults[0].selectedTransportCount;
+  const bikeUsageCount = secondVehicleResults[0].selectedTransportCount;
 
   const totalCount = carUsageCount + bikeUsageCount;
   const jsonObjectMonthUsageCount = await Promise.all(
     months.map(async (monthName, index) => {
       try {
         const monthIndexNumber = index + 1;
-        const carResults = await MobilityActivity.getTransportTypeCountByMonth(
-          firstTransportTypeName,
-          monthIndexNumber
-        );
-        const carCount = carResults[0].selectedTransportCount;
+        const firstVehicleResults =
+          await MobilityActivity.getTransportTypeCountByMonth(
+            firstTransportTypeName,
+            monthIndexNumber
+          );
+        const firstVehicleCount = firstVehicleResults[0].selectedTransportCount;
 
-        const bikeResults = await MobilityActivity.getTransportTypeCountByMonth(
-          secondTransportTypeName,
-          monthIndexNumber
-        );
-        const bikeCount = bikeResults[0].selectedTransportCount;
+        const secondVehicleResults =
+          await MobilityActivity.getTransportTypeCountByMonth(
+            secondTransportTypeName,
+            monthIndexNumber
+          );
+        const secondVehicleCount =
+          secondVehicleResults[0].selectedTransportCount;
 
         return (tempJsonObject = {
           monthName,
           transportTypes: [
-            { name: firstTransportTypeName, count: carCount },
-            { name: secondTransportTypeName, count: bikeCount },
+            { name: firstTransportTypeName, count: firstVehicleCount },
+            { name: secondTransportTypeName, count: secondVehicleCount },
           ],
         });
       } catch (e) {
