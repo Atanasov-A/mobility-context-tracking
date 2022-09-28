@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getOverallStatisticsTransportTypeByWeather } from "../../api/server/statistics/overallStatistics";
 import { LABEL_CONSTANTS } from "../../constants/ComponentsLabels";
@@ -65,15 +65,6 @@ const TransportTypeByWeather = () => {
         <Typography variant="h4">
           {`Impact of weather on ${TransportTypeEnum[transporTypeValue]} use`}
         </Typography>
-
-        {/* <Box sx={{ width: 180 }}>
-          <SelectDropdown
-            label={LABEL_CONSTANTS.transportType}
-            dropdownValues={Object.values(TransportTypeEnum)}
-            selectedDropdownValue={selectedTransportType}
-            setSelectedDropdownValue={setSelectedTransportType}
-          />
-        </Box> */}
       </Stack>
       <Grid
         container
