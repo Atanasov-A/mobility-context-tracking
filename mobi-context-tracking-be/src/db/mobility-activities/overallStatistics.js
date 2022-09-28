@@ -1,3 +1,6 @@
+const {
+  travelPurposeEnumList,
+} = require("../../models/enums/TravelPurposeEnum");
 const Weather = require("../weather/Weather");
 const MobilityActivity = require("./MobilityActivity");
 
@@ -132,8 +135,28 @@ const getOverallStatisticWeatherTransportType = async (transportName) => {
   };
 };
 
+const getOverallStatisticTravelPurpose = async () => {
+  const totalCount = (await MobilityActivity.getTravelPurposeTotalCount())[0]
+    .totalCount;
+  const results = (await MobilityActivity.getTravelPurposeCount())[0];
+
+  const obj = [{ name: travelPurposeEnumList[0], count: results.jobCount }];
+
+  const travelPurposeCountObj = [
+    { name: travelPurposeEnumList[0], count: results.jobCount },
+    { name: travelPurposeEnumList[1], count: results.educationCount },
+    { name: travelPurposeEnumList[2], count: results.businessCount },
+    { name: travelPurposeEnumList[3], count: results.shoppingCount },
+    { name: travelPurposeEnumList[4], count: results.leisureCount },
+    { name: travelPurposeEnumList[5], count: results.accompanyingCount },
+    { name: travelPurposeEnumList[6], count: results.vacationCount },
+  ];
+  return { travelPurposeCountObj, totalCount };
+};
+
 module.exports = {
   getOverallStatisticTransportType,
   getOverallStatisticTransportTypeByMonth,
   getOverallStatisticWeatherTransportType,
+  getOverallStatisticTravelPurpose,
 };

@@ -81,27 +81,6 @@ class MobilityActivity {
     });
   }
 
-  static getTravelPurposeCount(travelPurposeName) {
-    const travelPurposeNameLowerCase = travelPurposeName.toLowerCase();
-    const selectedTravelPurposeIndex = travelPurposeEnumList.findIndex(
-      tp === travelPurposeNameLowerCase
-    );
-    if (selectedTravelPurposeIndex === -1) {
-      throw new Error("Invalid travelPurpose type");
-    }
-
-    const query = `SELECT COUNT(*) as selectedTravelPurposeCount FROM mobility_activities ma 
-    INNER JOIN travel_purposes tp ON ma.travel_purpose_id = tp.id
-     WHERE tp.${travelPurposeNameLowerCase} = true`;
-
-    return new Promise((resolve, reject) => {
-      dbConnection.query(query, function (error, results, fields) {
-        if (error) return reject(error);
-        return resolve(results);
-      });
-    });
-  }
-
   static getTransportTypeCountByMonth(transportTypeName, monthNumber) {
     const selectedTransportTypeIndex = transportTypeEnumList.findIndex(
       (tt) => tt === transportTypeName
@@ -113,6 +92,75 @@ class MobilityActivity {
     const selectedTransportTypeId = selectedTransportTypeIndex + 1;
     const query = `SELECT COUNT(id) as selectedTransportCount FROM mobility_activities 
     WHERE transport_type_id = ${selectedTransportTypeId} AND MONTH(start_time) = ${monthNumber};`;
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
+
+  static getTravelPurposeTotalCount() {
+    const query = `SELECT (tempTable.jobCount
+      + tempTable.educationCount
+      + tempTable.businessCount
+      + tempTable.shoppingCount
+      + tempTable.leisureCount
+      + tempTable.accompanyingCount
+      + tempTable.vacationCount)
+      as totalCount
+      FROM(SELECT
+      IFNULL(SUM(job),0) as jobCount,
+      IFNULL(SUM(education),0) as educationCount,
+      IFNULL(SUM(business),0) as businessCount,
+      IFNULL(SUM(shopping),0) as shoppingCount,
+      IFNULL(SUM(leisure),0) as leisureCount,
+      IFNULL(SUM(accompanying),0) as accompanyingCount,
+      IFNULL(SUM(vacation),0) as vacationCount
+      FROM mobility_activities ma
+      INNER JOIN travel_purposes tp ON tp.id = ma.travel_purpose_id) as tempTable;`;
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
+
+  static getTravelPurposeCount() {
+    const query = `SELECT
+    IFNULL(SUM(job),0) as jobCount,
+    IFNULL(SUM(education),0) as educationCount,
+    IFNULL(SUM(business),0) as businessCount,
+    IFNULL(SUM(shopping),0) as shoppingCount,
+    IFNULL(SUM(leisure),0) as leisureCount,
+    IFNULL(SUM(accompanying),0) as accompanyingCount,
+    IFNULL(SUM(vacation),0) as vacationCount
+    FROM mobility_activities ma
+    INNER JOIN travel_purposes tp ON tp.id = ma.travel_purpose_id;`;
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
+
+  static getTravelPurposeCountByTravelPurposeName(travelPurposeName) {
+    const travelPurposeNameLowerCase = travelPurposeName.toLowerCase();
+    const selectedTravelPurposeIndex = travelPurposeEnumList.findIndex(
+      tp === travelPurposeNameLowerCase
+    );
+    if (selectedTravelPurposeIndex === -1) {
+      throw new Error("Invalid travelPurpose type");
+    }
+
+    const query = `SELECT COUNT(*) as selectedTravelPurposeCount FROM mobility_activities ma 
+    INNER JOIN travel_purposes tp ON ma.travel_purpose_id = tp.id
+     WHERE tp.${travelPurposeNameLowerCase} = true`;
 
     return new Promise((resolve, reject) => {
       dbConnection.query(query, function (error, results, fields) {

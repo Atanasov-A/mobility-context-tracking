@@ -1,3 +1,4 @@
+import { TravelPurpseStatisticDto } from "./../../../models/dto/TravelPurposeStatisticDto";
 import { TransportTypeEnum } from "./../../../models/enums/TransportTypeEnum";
 import { WeatherCountDto } from "./../../../models/dto/WeatherCountDto";
 import { TransportTypeUsageDto } from "../../../models/dto/TransportTypeStatisticDto";
@@ -7,6 +8,12 @@ import { serverClient } from "../serverClient";
 export const getOverallStatisticsTransportType = () => {
   return serverClient.get<TransportTypeUsageDto>(
     "/api/overall-statistics-transport-type"
+  );
+};
+
+export const getOverallStatisticsTravelPurpose = () => {
+  return serverClient.get<TravelPurpseStatisticDto>(
+    "/api/overall-statistics-travel-purpose"
   );
 };
 

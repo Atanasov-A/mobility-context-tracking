@@ -17,6 +17,7 @@ const {
   getOverallStatisticTransportType,
   getOverallStatisticTransportTypeByMonth,
   getOverallStatisticWeatherTransportType,
+  getOverallStatisticTravelPurpose,
 } = require("../db/mobility-activities/overallStatistics");
 const { transportTypeEnumList } = require("../models/enums/TransportTypeEnum");
 const { getTransportTypeId } = require("../utils/getTransportTypeId");
@@ -148,6 +149,14 @@ mobilityActivityRouter.get(
     const statisticData = await getOverallStatisticWeatherTransportType(
       transportTypeName
     );
+    res.status(200).send(statisticData);
+  }
+);
+
+mobilityActivityRouter.get(
+  "/overall-statistics-travel-purpose",
+  async (req, res) => {
+    const statisticData = await getOverallStatisticTravelPurpose();
     res.status(200).send(statisticData);
   }
 );

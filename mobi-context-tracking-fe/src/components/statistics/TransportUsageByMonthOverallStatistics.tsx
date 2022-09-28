@@ -64,12 +64,6 @@ const TransportUsageByMonthOverallStatistics = (props) => {
         setFirstDatasetValues(dataset1Values);
         setSecondDatasetName(dataset2Name);
         setSecondDatasetValues(dataset2Values);
-
-        console.log("l", labels);
-        console.log("d1n", dataset1Name);
-        console.log("d2n", dataset2Name);
-        console.log("d1", dataset1Values);
-        console.log("d2", dataset2Values);
       }
     })();
   }, [firstTransporTypeValue, secondTransporTypeValue]);
@@ -88,7 +82,7 @@ const TransportUsageByMonthOverallStatistics = (props) => {
            ${TransportTypeEnum[firstTransporTypeValue]} and
            ${TransportTypeEnum[secondTransporTypeValue]}`}
         </Typography>
-      </Stack> 
+      </Stack>
       <Grid
         container
         spacing={0.5}
