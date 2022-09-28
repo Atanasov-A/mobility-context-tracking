@@ -1,8 +1,8 @@
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
-import {useNavigate} from "react-router-dom";
-import {StyledTextField} from "../../shared/StyledTextField";
+import { useNavigate } from "react-router-dom";
+import { StyledTextField } from "../../shared/StyledTextField";
 
 const ResetPasswordPage = () => {
   const navigate = useNavigate();
@@ -10,9 +10,6 @@ const ResetPasswordPage = () => {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-    });
   };
 
   return (
@@ -51,5 +48,4 @@ const ResetPasswordPage = () => {
   );
 };
 
-export {ResetPasswordPage};
-
+export { ResetPasswordPage };

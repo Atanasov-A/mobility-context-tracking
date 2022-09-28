@@ -26,7 +26,6 @@ function CustomDateTimePicker(props: Props) {
           }}
           renderInput={(params) => <TextField {...params} />}
           minDateTime={props.minDateTime ? props.minDateTime : null}
-          disablePast={props.minDateTime ? true : false}
         />
       )}
 
@@ -45,7 +44,6 @@ function CustomDateTimePicker(props: Props) {
             />
           )}
           minDateTime={props.minDateTime ? props.minDateTime : null}
-          disablePast={props.minDateTime ? true : false}
         />
       )}
     </Stack>

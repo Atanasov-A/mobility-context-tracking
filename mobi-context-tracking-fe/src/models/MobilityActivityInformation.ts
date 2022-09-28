@@ -3,7 +3,7 @@ import { TravelPurposeEnum } from "./enums/TravelPurposeEnum";
 import { WeatherEnum } from "./enums/WeatherEnum";
 import { LocationPoint } from "./LocationPoint";
 
-export interface RouteInformation {
+export interface MobilityActivityInformation {
   startLocationName: string;
   endLocationName: string;
   startLocationPoint: LocationPoint;

@@ -43,7 +43,6 @@ const SignUpPage = () => {
 
   useEffect(() => {
     if (password.length > 0) {
-      console.log(isPasswordValid(password));
       setPasswordValidationError(!isPasswordValid(password));
     }
   }, [password]);

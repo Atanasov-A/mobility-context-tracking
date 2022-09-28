@@ -1,11 +1,13 @@
 import moment from "moment";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { createMobilityActivity } from "../../api/server/createMobilityActivity";
 import { LABEL_CONSTANTS } from "../../constants/ComponentsLabels";
 import { getTransportTypeKeyByValue } from "../../models/enums/TransportTypeEnum";
 import { getTravelPurposeKeyByValue } from "../../models/enums/TravelPurposeEnum";
 import { getWeatherKeyByValue } from "../../models/enums/WeatherEnum";
 import { GeoapifyLocation } from "../../models/GeoapifyLocation";
-import { RouteInformation } from "../../models/RouteInformation";
+import { MobilityActivityInformation } from "../../models/MobilityActivityInformation";
 import { calculateDifferenceBetweenDatesInMillis } from "../../utils/dateHelpers";
 import { HorizontalLinearStepper } from "../HorizontalLinearStepper";
 import { JourneyInformation } from "../JourneyInformation";
@@ -47,6 +49,9 @@ const CreateJourneyPage = () => {
   const [transportTypeReason, setTransportTypeReason] = useState<string>("");
 
   const [showAlertNoRouteFound, setShowAlertNoRouteFound] = useState(false);
+  const [alertSuccessfullySaved, setAlertSuccessfullySaved] = useState(false);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (
@@ -124,7 +129,7 @@ const CreateJourneyPage = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  const handleOnComplete = () => {
+  const handleOnComplete = async () => {
     const travelPurposeEnumList = selectedTravelPurposeValues.map((tpv) =>
       getTravelPurposeKeyByValue(tpv)
     );
@@ -132,7 +137,7 @@ const CreateJourneyPage = () => {
       getWeatherKeyByValue(sw)
     );
 
-    const routeInformationObject: RouteInformation = {
+    const mobilityActivityInformationObject: MobilityActivityInformation = {
       startLocationName: startLocationName,
       endLocationName: endLocationName,
       startLocationPoint: { lat: startLocation.lat, lon: startLocation.lon },
@@ -144,7 +149,16 @@ const CreateJourneyPage = () => {
       transportType: getTransportTypeKeyByValue(selectedTransportValue),
       reasonForTransport: transportTypeReason,
     };
-    console.log("on complete", routeInformationObject);
+
+    const result = await createMobilityActivity(
+      mobilityActivityInformationObject
+    );
+    if (result.status === 200 || result.status === 201) {
+      setAlertSuccessfullySaved(true);
+      setTimeout(() => {
+        navigate("/overall-statistics");
+      }, 2500);
+    }
   };
 
   return (
@@ -157,6 +171,11 @@ const CreateJourneyPage = () => {
         handleOnComplete={handleOnComplete}
         stepperValidationError={stepperValidationError}
         stepperValidationErrorIndex={stepperValidationErrorIndex}
+      />
+
+      <StyledAlert
+        alertTitle="Mobility activity saved"
+        showAlert={alertSuccessfullySaved}
       />
 
       {activeStep === firstStep && (
