@@ -4,7 +4,6 @@ import { useAuthToken } from "../components/shared/hooks/useAuthToken";
 const redirectPath = "/login";
 
 interface Props {
-  // token: string | null;
   children: React.ReactNode;
 }
 

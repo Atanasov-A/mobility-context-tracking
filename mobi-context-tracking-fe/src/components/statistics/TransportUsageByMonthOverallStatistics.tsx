@@ -1,4 +1,4 @@
-import { Box, Grid, Stack, Typography } from "@mui/material";
+import { Grid, Stack, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { getOverallStatisticsTransportTypeComparsionByMonth } from "../../api/server/statistics/overallStatistics";
 import { LABEL_CONSTANTS } from "../../constants/ComponentsLabels";

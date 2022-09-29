@@ -6,6 +6,8 @@ const {
 } = require("../../models/enums/TravelPurposeEnum");
 const dbConnection = require("../db");
 
+const User = require("../users/User");
+
 const MOBILITY_ACTIVITY_TYPE_TABLE_NAME = "mobility_activities";
 
 class MobilityActivity {
@@ -51,7 +53,7 @@ class MobilityActivity {
     });
   }
 
-  static async getSavedMobilityActivitiesCount() {
+  static getSavedMobilityActivitiesCount() {
     const query = `SELECT COUNT(id) as totalCount from mobility_activities;`;
 
     return new Promise((resolve, reject) => {
@@ -62,7 +64,7 @@ class MobilityActivity {
     });
   }
 
-  static async getTransportTypeCount(transportTypeName) {
+  static getTransportTypeCount(transportTypeName) {
     const selectedTransportTypeIndex = transportTypeEnumList.findIndex(
       (tt) => tt === transportTypeName
     );
@@ -161,6 +163,61 @@ class MobilityActivity {
     const query = `SELECT COUNT(*) as selectedTravelPurposeCount FROM mobility_activities ma 
     INNER JOIN travel_purposes tp ON ma.travel_purpose_id = tp.id
      WHERE tp.${travelPurposeNameLowerCase} = true`;
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
+
+  static async getTransportUsageTotalCount(userEmail) {
+    let query = `SELECT SUM(tempTable.count) as totalCount FROM
+    (SELECT COUNT(ma.transport_type_id) as count from mobility_activities ma 
+    INNER JOIN transport_types t ON t.id = ma.transport_type_id) as tempTable;`;
+
+    if (userEmail != null) {
+      const userResults = await User.getUser(userEmail);
+
+      if (userResults.length === 0) {
+        throw new Error("user not found");
+      }
+
+      const userId = userResults[0].id;
+      query = `SELECT SUM(tempTable.count) as totalCount 
+      FROM (SELECT COUNT(ma.transport_type_id) as count from mobility_activities ma
+      INNER JOIN transport_types t ON t.id = ma.transport_type_id 
+      WHERE user_id = ${userId}) as tempTable;`;
+    }
+
+    return new Promise((resolve, reject) => {
+      dbConnection.query(query, function (error, results, fields) {
+        if (error) return reject(error);
+        return resolve(results);
+      });
+    });
+  }
+
+  static async getTransportUsageCount(userEmail) {
+    let query = `SELECT  t.transport_name,ma.transport_type_id,
+    COUNT(ma.transport_type_id) as count from mobility_activities ma
+    INNER JOIN transport_types t ON t.id = ma.transport_type_id
+    GROUP BY (transport_type_id);`;
+
+    if (userEmail != null) {
+      const userResults = await User.getUser(userEmail);
+
+      if (userResults.length === 0) {
+        throw new Error("user not found");
+      }
+      const userId = userResults[0].id;
+      query = `SELECT  t.transport_name,ma.transport_type_id,
+        COUNT(ma.transport_type_id) as count from mobility_activities ma
+        INNER JOIN transport_types t ON t.id = ma.transport_type_id
+        WHERE user_id = ${userId} 
+        GROUP BY (transport_type_id);`;
+    }
 
     return new Promise((resolve, reject) => {
       dbConnection.query(query, function (error, results, fields) {

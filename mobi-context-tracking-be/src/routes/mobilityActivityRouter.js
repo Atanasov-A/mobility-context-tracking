@@ -18,6 +18,8 @@ const {
   getOverallStatisticTransportTypeByMonth,
   getOverallStatisticWeatherTransportType,
   getOverallStatisticTravelPurpose,
+  getPersonalStatisticsTransportUsage,
+  getPersonalStatisticWeatherTransportType,
 } = require("../db/mobility-activities/overallStatistics");
 const { transportTypeEnumList } = require("../models/enums/TransportTypeEnum");
 const { getTransportTypeId } = require("../utils/getTransportTypeId");
@@ -26,7 +28,6 @@ mobilityActivityRouter.post(
   "/add-mobility-activity",
   postValidateMobilityActivity,
   async (req, res) => {
-    const authToken = req.headers.authorization.split(" ")[1];
     const startLocationName = req.body.startLocationName;
     const endLocationName = req.body.endLocationName;
     const startLocationPoint = req.body.startLocationPoint; // lat, lon
@@ -37,7 +38,7 @@ mobilityActivityRouter.post(
     const weatherList = req.body.weatherList;
     const transportType = req.body.transportType;
     const reasonForTransport = req.body.reasonForTransport;
-
+    const authToken = req.headers.authorization.split(" ")[1];
     const decodedToken = jwt.decode(authToken);
     const userEmail = decodedToken.email;
 
@@ -98,7 +99,6 @@ mobilityActivityRouter.post(
         ma: resultMobilityActivities,
       });
     } catch (e) {
-      console.error("ERROR:", e);
       return res.status(400).send();
     }
   }
@@ -128,11 +128,15 @@ mobilityActivityRouter.get(
       return res.status(400).send();
     }
 
-    const statisticTtData = await getOverallStatisticTransportTypeByMonth(
-      firstTransportTypeName,
-      secondTransportTypeName
-    );
-    res.status(200).send(statisticTtData);
+    try {
+      const statisticTtData = await getOverallStatisticTransportTypeByMonth(
+        firstTransportTypeName,
+        secondTransportTypeName
+      );
+      return res.status(200).send(statisticTtData);
+    } catch (e) {
+      return res.status(400).send(e.message);
+    }
   }
 );
 
@@ -158,6 +162,47 @@ mobilityActivityRouter.get(
   async (req, res) => {
     const statisticData = await getOverallStatisticTravelPurpose();
     res.status(200).send(statisticData);
+  }
+);
+
+mobilityActivityRouter.get(
+  "/personal-statistics-transport-usage",
+  async (req, res) => {
+    const authToken = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.decode(authToken);
+    const userEmail = decodedToken.email;
+    try {
+      const statisticData = await getPersonalStatisticsTransportUsage(
+        userEmail
+      );
+      return res.status(200).send(statisticData);
+    } catch (e) {
+      return res.status(400).send(e.message);
+    }
+  }
+);
+
+mobilityActivityRouter.get(
+  "/personal-statistics-transport-type-weather",
+  async (req, res) => {
+    const transportTypeName = req.query.transportTypeName;
+    const authToken = req.headers.authorization.split(" ")[1];
+    const decodedToken = jwt.decode(authToken);
+    const userEmail = decodedToken.email;
+
+    const transportTypeId = getTransportTypeId(transportTypeName);
+    if (transportTypeId === -1) {
+      return res.status(400).send();
+    }
+    try {
+      const statisticData = await getPersonalStatisticWeatherTransportType(
+        transportTypeName,
+        userEmail
+      );
+      return res.status(200).send(statisticData);
+    } catch (e) {
+      return res.status(400).send(e.message);
+    }
   }
 );
 

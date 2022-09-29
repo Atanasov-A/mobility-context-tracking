@@ -1,15 +1,16 @@
 const {
   travelPurposeEnumList,
 } = require("../../models/enums/TravelPurposeEnum");
+const { weatherEnumList } = require("../../models/enums/WeatherEnum");
 const Weather = require("../weather/Weather");
 const MobilityActivity = require("./MobilityActivity");
 
 const getOverallStatisticTransportType = async () => {
   try {
     const carResults = await MobilityActivity.getTransportTypeCount("car");
-    const carUsageCount = carResults[0].selectedTransportCount;
+    const carUsageCount = carResults[0]?.selectedTransportCount ?? 0;
     const bikeResults = await MobilityActivity.getTransportTypeCount("bike");
-    const bikeUsageCount = bikeResults[0].selectedTransportCount;
+    const bikeUsageCount = bikeResults[0]?.selectedTransportCount ?? 0;
     const walkingResults = await MobilityActivity.getTransportTypeCount(
       "walking"
     );
@@ -20,15 +21,15 @@ const getOverallStatisticTransportType = async () => {
     );
     const totalCountResults =
       await MobilityActivity.getSavedMobilityActivitiesCount();
-    const totalCount = totalCountResults[0].totalCount;
+    const totalCount = totalCountResults[0]?.totalCount ?? 0;
 
-    const walkingUsageCount = walkingResults[0].selectedTransportCount;
+    const walkingUsageCount = walkingResults[0]?.selectedTransportCount ?? 0;
 
     const longDistanceTrainUsageCount =
-      longDistanceTrainResults[0].selectedTransportCount;
+      longDistanceTrainResults[0]?.selectedTransportCount ?? 0;
 
     const publicTransportUsageCount =
-      publicTransportResults[0].selectedTransportCount;
+      publicTransportResults[0]?.selectedTransportCount ?? 0;
 
     const transportTypeStatisticsObject = {
       carUsageCount,
@@ -39,7 +40,9 @@ const getOverallStatisticTransportType = async () => {
       totalCount,
     };
     return transportTypeStatisticsObject;
-  } catch (e) {}
+  } catch (e) {
+    throw e;
+  }
 };
 
 const months = [
@@ -65,11 +68,11 @@ const getOverallStatisticTransportTypeByMonth = async (
   const firstVehicleResults = await MobilityActivity.getTransportTypeCount(
     firstTransportTypeName
   );
-  const carUsageCount = firstVehicleResults[0].selectedTransportCount;
+  const carUsageCount = firstVehicleResults[0]?.selectedTransportCount ?? 0;
   const secondVehicleResults = await MobilityActivity.getTransportTypeCount(
     secondTransportTypeName
   );
-  const bikeUsageCount = secondVehicleResults[0].selectedTransportCount;
+  const bikeUsageCount = secondVehicleResults[0]?.selectedTransportCount ?? 0;
 
   const totalCount = carUsageCount + bikeUsageCount;
   const jsonObjectMonthUsageCount = await Promise.all(
@@ -81,7 +84,8 @@ const getOverallStatisticTransportTypeByMonth = async (
             firstTransportTypeName,
             monthIndexNumber
           );
-        const firstVehicleCount = firstVehicleResults[0].selectedTransportCount;
+        const firstVehicleCount =
+          firstVehicleResults[0]?.selectedTransportCount ?? 0;
 
         const secondVehicleResults =
           await MobilityActivity.getTransportTypeCountByMonth(
@@ -89,7 +93,7 @@ const getOverallStatisticTransportTypeByMonth = async (
             monthIndexNumber
           );
         const secondVehicleCount =
-          secondVehicleResults[0].selectedTransportCount;
+          secondVehicleResults[0]?.selectedTransportCount ?? 0;
 
         return (tempJsonObject = {
           monthName,
@@ -99,7 +103,7 @@ const getOverallStatisticTransportTypeByMonth = async (
           ],
         });
       } catch (e) {
-        console.log(e);
+        throw e;
       }
     })
   );
@@ -108,20 +112,17 @@ const getOverallStatisticTransportTypeByMonth = async (
 };
 
 const getOverallStatisticWeatherTransportType = async (transportName) => {
-  const weatherTotalCount = (
-    await Weather.getWeatherTotalCount(transportName)
-  )[0].totalCount;
-  const weatherCount = (
-    await Weather.getWeatherCountByWeather(transportName)
-  )[0];
-  const sunny = weatherCount.sunnyCount;
-  const rainy = weatherCount.rainyCount;
-  const hot = weatherCount.hotCount;
-  const stormy = weatherCount.stotmyCount;
-  const windy = weatherCount.windyCount;
-  const cold = weatherCount.coldCount;
-  const cloudy = weatherCount.cloudyCount;
-  const snowy = weatherCount.snowyCount;
+  const weatherTotalCount =
+    (await Weather.getWeatherTotalCount(transportName))[0]?.totalCount ?? 0;
+  const weatherCount = await Weather.getWeatherCountByWeather(transportName);
+  const sunny = weatherCount[0]?.sunnyCount ?? 0;
+  const rainy = weatherCount[0]?.rainyCount ?? 0;
+  const hot = weatherCount[0]?.hotCount ?? 0;
+  const stormy = weatherCount[0]?.stotmyCount ?? 0;
+  const windy = weatherCount[0]?.windyCount ?? 0;
+  const cold = weatherCount[0]?.coldCount ?? 0;
+  const cloudy = weatherCount[0]?.cloudyCount ?? 0;
+  const snowy = weatherCount[0]?.snowyCount ?? 0;
   return {
     sunny,
     rainy,
@@ -136,22 +137,167 @@ const getOverallStatisticWeatherTransportType = async (transportName) => {
 };
 
 const getOverallStatisticTravelPurpose = async () => {
-  const totalCount = (await MobilityActivity.getTravelPurposeTotalCount())[0]
-    .totalCount;
-  const results = (await MobilityActivity.getTravelPurposeCount())[0];
-
-  const obj = [{ name: travelPurposeEnumList[0], count: results.jobCount }];
+  const totalCount =
+    (await MobilityActivity.getTravelPurposeTotalCount())[0]?.totalCount ?? 0;
+  const results = await MobilityActivity.getTravelPurposeCount();
 
   const travelPurposeCountObj = [
-    { name: travelPurposeEnumList[0], count: results.jobCount },
-    { name: travelPurposeEnumList[1], count: results.educationCount },
-    { name: travelPurposeEnumList[2], count: results.businessCount },
-    { name: travelPurposeEnumList[3], count: results.shoppingCount },
-    { name: travelPurposeEnumList[4], count: results.leisureCount },
-    { name: travelPurposeEnumList[5], count: results.accompanyingCount },
-    { name: travelPurposeEnumList[6], count: results.vacationCount },
+    { name: travelPurposeEnumList[0], count: results[0]?.jobCount ?? 0 },
+    { name: travelPurposeEnumList[1], count: results[0]?.educationCount ?? 0 },
+    { name: travelPurposeEnumList[2], count: results[0]?.businessCount ?? 0 },
+    { name: travelPurposeEnumList[3], count: results[0]?.shoppingCount ?? 0 },
+    { name: travelPurposeEnumList[4], count: results[0]?.leisureCount ?? 0 },
+    {
+      name: travelPurposeEnumList[5],
+      count: results[0]?.accompanyingCount ?? 0,
+    },
+    { name: travelPurposeEnumList[6], count: results[0]?.vacationCount ?? 0 },
   ];
   return { travelPurposeCountObj, totalCount };
+};
+
+const getPersonalStatisticsTransportUsage = async (userEmail) => {
+  const personalTotalCount =
+    (await MobilityActivity.getTransportUsageTotalCount(userEmail))[0]
+      ?.totalCount ?? 0;
+  const results = await MobilityActivity.getTransportUsageCount(userEmail);
+  const personalStatisticObjectKeyUsageCount = [
+    { name: results[0]?.transport_name ?? "", count: results[0]?.count ?? 0 },
+    { name: results[1]?.transport_name ?? "", count: results[1]?.count ?? 0 },
+    { name: results[2]?.transport_name ?? "", count: results[2]?.count ?? 0 },
+    { name: results[3]?.transport_name ?? "", count: results[3]?.count ?? 0 },
+    { name: results[4]?.transport_name ?? "", count: results[4]?.count ?? 0 },
+  ];
+
+  const overallTotalCount =
+    (await MobilityActivity.getTransportUsageTotalCount())[0]?.totalCount ?? 0;
+
+  const allUsersResults = await MobilityActivity.getTransportUsageCount();
+  const overallStatisticObjectKeyUsageCount = [
+    {
+      name: allUsersResults[0]?.transport_name ?? "",
+      count: allUsersResults[0]?.count ?? 0,
+    },
+    {
+      name: allUsersResults[1]?.transport_name ?? "",
+      count: allUsersResults[1]?.count ?? 0,
+    },
+    {
+      name: allUsersResults[2]?.transport_name ?? "",
+      count: allUsersResults[2]?.count ?? 0,
+    },
+    {
+      name: allUsersResults[3]?.transport_name ?? "",
+      count: allUsersResults[3]?.count ?? 0,
+    },
+    {
+      name: allUsersResults[4]?.transport_name ?? "",
+      count: allUsersResults[4]?.count ?? 0,
+    },
+  ];
+
+  return {
+    personalStatisticObjectKeyUsageCount,
+    personalTotalCount,
+    overallStatisticObjectKeyUsageCount,
+    overallTotalCount,
+  };
+};
+
+const getPersonalStatisticWeatherTransportType = async (
+  transportName,
+  userEmail
+) => {
+  const overallTotalCount =
+    (await Weather.getWeatherTotalCount(transportName))[0]?.totalCount ?? 0;
+  const overalWeatherResults = await Weather.getWeatherCountByWeather(
+    transportName
+  );
+
+  const overallStatisticObjectKeyUsageCount = [
+    {
+      name: weatherEnumList[0],
+      count: overalWeatherResults[0]?.sunnyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[1],
+      count: overalWeatherResults[0]?.rainyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[2],
+      count: overalWeatherResults[0]?.hotCount ?? 0,
+    },
+    {
+      name: weatherEnumList[3],
+      count: overalWeatherResults[0]?.coldCount ?? 0,
+    },
+    {
+      name: weatherEnumList[4],
+      count: overalWeatherResults[0]?.windyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[5],
+      count: overalWeatherResults[0]?.snowyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[6],
+      count: overalWeatherResults[0]?.cloudyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[7],
+      count: overalWeatherResults[0]?.stormyCount ?? 0,
+    },
+  ];
+
+  const personalTotalCount =
+    (await Weather.getWeatherTotalCount(transportName, userEmail))[0]
+      ?.totalCount ?? 0;
+  const personalWeatherResults = await Weather.getWeatherCountByWeather(
+    transportName,
+    userEmail
+  );
+
+  const personalStatisticObjectKeyUsageCount = [
+    {
+      name: weatherEnumList[0],
+      count: personalWeatherResults[0]?.sunnyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[1],
+      count: personalWeatherResults[0]?.rainyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[2],
+      count: personalWeatherResults[0]?.hotCount ?? 0,
+    },
+    {
+      name: weatherEnumList[3],
+      count: personalWeatherResults[0]?.coldCount ?? 0,
+    },
+    {
+      name: weatherEnumList[4],
+      count: personalWeatherResults[0]?.windyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[5],
+      count: personalWeatherResults[0]?.snowyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[6],
+      count: personalWeatherResults[0]?.cloudyCount ?? 0,
+    },
+    {
+      name: weatherEnumList[7],
+      count: personalWeatherResults[0]?.stormyCount ?? 0,
+    },
+  ];
+
+  return {
+    personalStatisticObjectKeyUsageCount,
+    personalTotalCount,
+    overallStatisticObjectKeyUsageCount,
+    overallTotalCount,
+  };
 };
 
 module.exports = {
@@ -159,4 +305,6 @@ module.exports = {
   getOverallStatisticTransportTypeByMonth,
   getOverallStatisticWeatherTransportType,
   getOverallStatisticTravelPurpose,
+  getPersonalStatisticsTransportUsage,
+  getPersonalStatisticWeatherTransportType,
 };

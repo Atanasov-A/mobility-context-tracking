@@ -124,6 +124,8 @@ interface Props {
   label: string;
   values: number[];
   title?: string;
+  secondValues?: number[];
+  secondLabel?: string;
 }
 
 const bgColor = "rgba(98, 94, 243, 0.7)";
@@ -149,19 +151,42 @@ const CustomRadarChart = (props: Props) => {
   }, [isBiggerThanSmartphone]);
 
   useEffect(() => {
-    const dataObj = {
-      labels: props.labels,
-      datasets: [
-        {
-          label: props.label,
-          data: props.values,
-          backgroundColor: bgColor,
-          borderColor: borderColor,
-          borderWidth: 1,
-        },
-      ],
-    };
-    setChartData(dataObj);
+    if (props.secondValues != null && props.secondLabel != null) {
+      const dataObj = {
+        labels: props.labels,
+        datasets: [
+          {
+            label: props.label,
+            data: props.values,
+            backgroundColor: bgColor,
+            borderColor: borderColor,
+            borderWidth: 1,
+          },
+          {
+            label: props.secondLabel,
+            data: props.secondValues,
+            backgroundColor: "rgba(255,215,0, 0.7)",
+            borderColor: "rgba(255,215,0, 1)",
+            borderWidth: 1,
+          },
+        ],
+      };
+      setChartData(dataObj);
+    } else {
+      const dataObj = {
+        labels: props.labels,
+        datasets: [
+          {
+            label: props.label,
+            data: props.values,
+            backgroundColor: bgColor,
+            borderColor: borderColor,
+            borderWidth: 1,
+          },
+        ],
+      };
+      setChartData(dataObj);
+    }
   }, [props]);
   return (
     <>

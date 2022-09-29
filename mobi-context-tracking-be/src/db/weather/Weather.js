@@ -1,5 +1,6 @@
 const { getTransportTypeId } = require("../../utils/getTransportTypeId");
 const dbConnection = require("../db");
+const User = require("../users/User");
 
 const WEATHER_TABLE_NAME = "weather";
 class Weather {
@@ -28,12 +29,12 @@ class Weather {
     });
   }
 
-  static async getWeatherTotalCount(transportTypeName) {
+  static async getWeatherTotalCount(transportTypeName, userEmail) {
     const transportId = getTransportTypeId(transportTypeName);
     if (transportId === -1) {
       throw new Error("Invalid transport type");
     }
-    const query = `SELECT (tempTable.sunnyCount
+    let query = `SELECT (tempTable.sunnyCount
       + tempTable.hotCount
       + tempTable.rainyCount
       + tempTable.stotmyCount
@@ -54,6 +55,36 @@ class Weather {
       INNER JOIN weather w ON w.ID = ma.weather_id
       where transport_type_id = ${transportId}) as tempTable;`;
 
+    if (userEmail != null) {
+      const userResults = await User.getUser(userEmail);
+
+      if (userResults.length === 0) {
+        throw new Error("user not found");
+      }
+      const userId = userResults[0].id;
+      query = `SELECT (tempTable.sunnyCount
+        + tempTable.hotCount
+        + tempTable.rainyCount
+        + tempTable.stormyCount
+        + tempTable.windyCount
+        + tempTable.coldCount
+        + tempTable.cloudyCount
+        + tempTable.snowyCount)
+        as totalCount 
+        FROM( SELECT IFNULL(SUM(sunny),0) as sunnyCount,
+        IFNULL(SUM(rainy),0) as rainyCount,
+        IFNULL(SUM(hot),0) as hotCount,
+        IFNULL(SUM(stormy),0) as stormyCount,
+        IFNULL(SUM(windy),0) as windyCount,
+        IFNULL(SUM(cold),0) as coldCount,
+        IFNULL(SUM(cloudy),0) as cloudyCount,
+        IFNULL(SUM(snowy),0) as snowyCount
+        FROM mobility_activities ma
+        INNER JOIN weather w ON w.ID = ma.weather_id
+        WHERE transport_type_id = ${transportId} 
+        AND ma.user_id = ${userId}) as tempTable;`;
+    }
+
     return new Promise((resolve, reject) => {
       dbConnection.query(query, function (error, results, fields) {
         if (error) return reject(error);
@@ -61,16 +92,16 @@ class Weather {
       });
     });
   }
-  static async getWeatherCountByWeather(transportTypeName) {
+  static async getWeatherCountByWeather(transportTypeName, userEmail) {
     const transportId = getTransportTypeId(transportTypeName);
     if (transportId === -1) {
       throw new Error("Invalid transport type");
     }
-    const query = `SELECT
+    let query = `SELECT
         IFNULL(SUM(sunny),0) as sunnyCount,
         IFNULL(SUM(rainy),0) as rainyCount,
         IFNULL(SUM(hot),0) as hotCount,
-        IFNULL(SUM(stormy),0) as stotmyCount,
+        IFNULL(SUM(stormy),0) as stormyCount,
         IFNULL(SUM(windy),0) as windyCount,
         IFNULL(SUM(cold),0) as coldCount,
         IFNULL(SUM(cloudy),0) as cloudyCount,
@@ -78,6 +109,28 @@ class Weather {
         FROM mobility_activities ma
         INNER JOIN weather w ON w.ID = ma.weather_id
         WHERE transport_type_id = ${transportId};`;
+
+    if (userEmail != null) {
+      const userResults = await User.getUser(userEmail);
+
+      if (userResults.length === 0) {
+        throw new Error("user not found");
+      }
+      const userId = userResults[0].id;
+      query = `SELECT
+      IFNULL(SUM(sunny),0) as sunnyCount,
+      IFNULL(SUM(rainy),0) as rainyCount,
+      IFNULL(SUM(hot),0) as hotCount,
+      IFNULL(SUM(stormy),0) as stormyCount,
+      IFNULL(SUM(windy),0) as windyCount,
+      IFNULL(SUM(cold),0) as coldCount,
+      IFNULL(SUM(cloudy),0) as cloudyCount,
+      IFNULL(SUM(snowy),0) as snowyCount
+      FROM mobility_activities ma
+      INNER JOIN weather w ON w.ID = ma.weather_id
+      WHERE transport_type_id = ${transportId}
+      AND ma.user_id = ${userId};`;
+    }
 
     return new Promise((resolve, reject) => {
       dbConnection.query(query, function (error, results, fields) {
