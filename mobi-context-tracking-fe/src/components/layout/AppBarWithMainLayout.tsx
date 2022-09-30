@@ -19,8 +19,8 @@ import moment from "moment";
 import "moment/locale/de";
 import * as React from "react";
 import { useNavigate } from "react-router-dom";
+import { validateToken } from "../../api/server/auth/login";
 import { RoutesComponent } from "../../routes/RoutesComponent";
-import { isTokenExpired } from "../../utils/tokenValidation";
 import { useAuthToken } from "../shared/hooks/useAuthToken";
 import { AppBar } from "./AppBar";
 import { DrawerHeader } from "./DrawerHeader";
@@ -40,10 +40,12 @@ function AppBarWithMainLayout() {
 
   React.useEffect(() => {
     if (authToken != null) {
-      if (isTokenExpired(authToken)) {
-        clearTokenStorage();
-        navigate("/login");
-      }
+      validateToken()
+        .then()
+        .catch((e) => {
+          clearTokenStorage();
+          navigate("/login");
+        });
     }
   }, [authToken, clearTokenStorage, navigate]);
 

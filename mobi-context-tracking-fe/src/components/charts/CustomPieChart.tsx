@@ -7,12 +7,6 @@ import { chartBgColors, chartBorderColors } from "../../utils/chartColors";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
-// factor https://ux.stackexchange.com/questions/118130/graph-to-represent-how-influences-impact-fixed-related-factors-in-a-measure
-// ako e sunny e new value, a bez weather e old value
-
-// https://react-chartjs-2.js.org/examples/vertical-bar-chart/
-// mesecite i sravnqvane na bike i car
-
 interface PieChartDataObj {
   labels: string[];
   datasets: {
@@ -28,9 +22,6 @@ interface Props {
   values: string[];
   title?: string;
 }
-
-// USA RUSSIA shte mi e car, bike, a drugite shte sa mi vremeto
-// https://www.anychart.com/products/anychart/gallery/Radar_Charts_(Spiderweb)/Comparison_Radar_Chart.php
 
 const CustomPieChart = (props: Props) => {
   const [chartData, setChartData] = useState<PieChartDataObj | null>();

@@ -1,4 +1,7 @@
 const {
+  transportTypeEnumList,
+} = require("../../models/enums/TransportTypeEnum");
+const {
   travelPurposeEnumList,
 } = require("../../models/enums/TravelPurposeEnum");
 const { weatherEnumList } = require("../../models/enums/WeatherEnum");
@@ -162,11 +165,26 @@ const getPersonalStatisticsTransportUsage = async (userEmail) => {
       ?.totalCount ?? 0;
   const results = await MobilityActivity.getTransportUsageCount(userEmail);
   const personalStatisticObjectKeyUsageCount = [
-    { name: results[0]?.transport_name ?? "", count: results[0]?.count ?? 0 },
-    { name: results[1]?.transport_name ?? "", count: results[1]?.count ?? 0 },
-    { name: results[2]?.transport_name ?? "", count: results[2]?.count ?? 0 },
-    { name: results[3]?.transport_name ?? "", count: results[3]?.count ?? 0 },
-    { name: results[4]?.transport_name ?? "", count: results[4]?.count ?? 0 },
+    {
+      name: results[0]?.transport_name ?? transportTypeEnumList[0],
+      count: results[0]?.count ?? 0,
+    },
+    {
+      name: results[1]?.transport_name ?? transportTypeEnumList[1],
+      count: results[1]?.count ?? 0,
+    },
+    {
+      name: results[2]?.transport_name ?? transportTypeEnumList[2],
+      count: results[2]?.count ?? 0,
+    },
+    {
+      name: results[3]?.transport_name ?? transportTypeEnumList[3],
+      count: results[3]?.count ?? 0,
+    },
+    {
+      name: results[4]?.transport_name ?? transportTypeEnumList[4],
+      count: results[4]?.count ?? 0,
+    },
   ];
 
   const overallTotalCount =
@@ -175,23 +193,23 @@ const getPersonalStatisticsTransportUsage = async (userEmail) => {
   const allUsersResults = await MobilityActivity.getTransportUsageCount();
   const overallStatisticObjectKeyUsageCount = [
     {
-      name: allUsersResults[0]?.transport_name ?? "",
+      name: allUsersResults[0]?.transport_name ?? transportTypeEnumList[0],
       count: allUsersResults[0]?.count ?? 0,
     },
     {
-      name: allUsersResults[1]?.transport_name ?? "",
+      name: allUsersResults[1]?.transport_name ?? transportTypeEnumList[1],
       count: allUsersResults[1]?.count ?? 0,
     },
     {
-      name: allUsersResults[2]?.transport_name ?? "",
+      name: allUsersResults[2]?.transport_name ?? transportTypeEnumList[2],
       count: allUsersResults[2]?.count ?? 0,
     },
     {
-      name: allUsersResults[3]?.transport_name ?? "",
+      name: allUsersResults[3]?.transport_name ?? transportTypeEnumList[3],
       count: allUsersResults[3]?.count ?? 0,
     },
     {
-      name: allUsersResults[4]?.transport_name ?? "",
+      name: allUsersResults[4]?.transport_name ?? transportTypeEnumList[4],
       count: allUsersResults[4]?.count ?? 0,
     },
   ];

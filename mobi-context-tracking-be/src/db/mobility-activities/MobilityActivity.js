@@ -200,10 +200,10 @@ class MobilityActivity {
   }
 
   static async getTransportUsageCount(userEmail) {
-    let query = `SELECT  t.transport_name,ma.transport_type_id,
-    COUNT(ma.transport_type_id) as count from mobility_activities ma
-    INNER JOIN transport_types t ON t.id = ma.transport_type_id
-    GROUP BY (transport_type_id);`;
+    let query = `SELECT t.id,t.transport_name, COUNT(ma.transport_type_id) as count 
+    from transport_types t
+    LEFT OUTER JOIN mobility_activities ma on t.id = ma.transport_type_id
+    GROUP BY (id);`;
 
     if (userEmail != null) {
       const userResults = await User.getUser(userEmail);
@@ -212,11 +212,11 @@ class MobilityActivity {
         throw new Error("user not found");
       }
       const userId = userResults[0].id;
-      query = `SELECT  t.transport_name,ma.transport_type_id,
-        COUNT(ma.transport_type_id) as count from mobility_activities ma
-        INNER JOIN transport_types t ON t.id = ma.transport_type_id
-        WHERE user_id = ${userId} 
-        GROUP BY (transport_type_id);`;
+      query = `SELECT t.id,t.transport_name, COUNT(ma.transport_type_id) as count 
+    from transport_types t
+    LEFT OUTER JOIN mobility_activities ma on t.id = ma.transport_type_id
+    WHERE user_id = ${userId} 
+    GROUP BY (id);`;
     }
 
     return new Promise((resolve, reject) => {

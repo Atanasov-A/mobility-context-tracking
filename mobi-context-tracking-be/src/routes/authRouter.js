@@ -111,4 +111,8 @@ authRouter.post("/login", (req, res, next) => {
   );
 });
 
+authRouter.get("/verify-token", isLoggedIn, (req, res, next) => {
+  res.status(200).send();
+});
+
 module.exports = authRouter;

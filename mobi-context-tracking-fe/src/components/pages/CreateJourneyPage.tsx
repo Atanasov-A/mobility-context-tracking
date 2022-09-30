@@ -157,7 +157,7 @@ const CreateJourneyPage = () => {
       setAlertSuccessfullySaved(true);
       setTimeout(() => {
         navigate("/overall-statistics");
-      }, 2500);
+      }, 1500);
     }
   };
 

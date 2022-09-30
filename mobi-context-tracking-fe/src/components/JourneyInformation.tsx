@@ -4,7 +4,6 @@ import { LABEL_CONSTANTS } from "../constants/ComponentsLabels";
 import { TransportTypeEnum } from "../models/enums/TransportTypeEnum";
 import { TravelPurposeEnum } from "../models/enums/TravelPurposeEnum";
 import { WeatherEnum } from "../models/enums/WeatherEnum";
-import { displayDurationInMillisHumanReadable } from "../utils/dateHelpers";
 import { CustomDateTimePicker } from "./shared/CustomDateTimePicker";
 import { MultiSelectDropdown } from "./shared/MultiSelectDropdown";
 import { SelectDropdown } from "./shared/SelectDropdown";
@@ -70,33 +69,19 @@ const JourneyInformation = (props: Props) => {
         </Grid>
 
         <Grid container spacing={2} sx={{ mb: 3 }}>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={6}>
             <CustomDateTimePicker
               label={LABEL_CONSTANTS.startTime}
               dateValue={props.startDateValue}
               setDateValue={props.setStartDateValue}
             />
           </Grid>
-          <Grid item xs={12} md={5}>
+          <Grid item xs={12} md={6}>
             <CustomDateTimePicker
               label={LABEL_CONSTANTS.endTime}
               dateValue={props.endDateValue}
               setDateValue={props.setEndDateValue}
               minDateTime={props.startDateValue}
-            />
-          </Grid>
-          <Grid item xs={12} md={2}>
-            <TextField
-              fullWidth
-              id="duration"
-              value={displayDurationInMillisHumanReadable(
-                props.travelDurationInMillis
-              )}
-              label={LABEL_CONSTANTS.travelDuration}
-              helperText="Dynamically calculated"
-              onChange={() => {}}
-              InputProps={{ readOnly: true }}
-              InputLabelProps={{ shrink: true }}
             />
           </Grid>
         </Grid>

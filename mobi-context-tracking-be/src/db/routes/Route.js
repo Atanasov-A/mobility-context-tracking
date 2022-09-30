@@ -2,9 +2,6 @@ const dbConnection = require("../db");
 
 const ROUTES_TABLE_NAME = "routes";
 
-// SELECT ROUND(ST_Distance_Sphere(point(start_location_lon, start_location_lon),
-// point(end_location_lon, end_location_lat))) as distanceInMeters FROM routes;
-
 class Route {
   constructor(
     id,

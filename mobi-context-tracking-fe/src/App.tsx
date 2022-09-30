@@ -5,7 +5,6 @@ import { BrowserRouter } from "react-router-dom";
 import { AppBarWithMainLayout } from "./components/layout/AppBarWithMainLayout";
 import { theme } from "./components/theme/CustomTheme";
 
-// https://www.robinwieruch.de/react-router-private-routes/
 function App() {
   return (
     <div className="App">

@@ -1,4 +1,3 @@
-// https://www.digitalocean.com/community/tutorials/how-to-add-login-authentication-to-react-applications
 const useAuthToken = () => {
   const getToken = (): string | null => {
     const sessionStorageTokenString = sessionStorage.getItem("token") as
@@ -22,17 +21,12 @@ const useAuthToken = () => {
       return localStorageTokenString;
     }
     return null;
-    // const userToken = JSON.parse(tokenString);
-    // return userToken?.token;
   };
 
   const saveTokenInLocalStorage = (userToken: string) => {
     // Session storage
     localStorage.setItem("token", userToken);
     sessionStorage.removeItem("token");
-
-    // localStorage.setItem("token", JSON.stringify(userToken));
-    // setToken(userToken.token);
   };
 
   const saveTokenInSesssionStorage = (userToken) => {
