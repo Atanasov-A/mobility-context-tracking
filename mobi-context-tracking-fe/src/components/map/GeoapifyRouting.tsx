@@ -15,7 +15,6 @@ interface Props {
 export const GeoapifyRouting = (props: Props) => {
   const map = useMap();
 
-  // https://stackoverflow.com/questions/53154473/leaflet-remove-geojson-layers
   const layerGroupRoutes = new L.LayerGroup();
   const layerGroupMarkers = new L.LayerGroup();
 

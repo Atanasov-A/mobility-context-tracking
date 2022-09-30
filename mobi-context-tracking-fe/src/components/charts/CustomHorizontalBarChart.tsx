@@ -59,9 +59,6 @@ const options = {
   },
 };
 
-// https://stackblitz.com/edit/react-boilerplate-scalabw-45793890?file=index.js
-const labels = ["January", "February", "March", "April", "May", "June", "July"];
-
 interface BarDataObj {
   labels: string[];
   datasets: {
