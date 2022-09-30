@@ -12,8 +12,4 @@ export const createLeafletMarker = (
   }
 
   return customMarker;
-
-  //   const zooMarker = L.marker([48.09698, 11.555466])
-  //     .bindPopup(zooMarkerPopup)
-  //     .addTo(map);
 };

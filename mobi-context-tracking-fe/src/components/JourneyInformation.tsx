@@ -21,7 +21,6 @@ interface Props {
   setSelectedTransportValue: Dispatch<SetStateAction<string>>;
   reasonForChosenTransport: string;
   setReasonForChosenTransport: Dispatch<SetStateAction<string>>;
-  travelDurationInMillis: number | null;
   startLocationName: string;
   setStartLocationName: Dispatch<SetStateAction<string>>;
   endLocationName: string;

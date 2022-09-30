@@ -7,7 +7,6 @@ var path = require("path");
 var bodyParser = require("body-parser");
 
 // routes
-const router = require("./routes/router.js");
 const authRouter = require("./routes/authRouter.js");
 const mobilityActivityRouter = require("./routes/mobilityActivityRouter.js");
 const { isLoggedIn } = require("./middleware/isLoggedIn.js");

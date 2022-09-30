@@ -35,9 +35,6 @@ const CreateJourneyPage = () => {
 
   const [startDateValue, setStartDateValue] = useState<Date | null>(null);
   const [endDateValue, setEndDateValue] = useState<Date | null>(null);
-  const [travelDurationInMillis, setTravelDurationInMillis] = useState<
-    number | null
-  >(null);
 
   const [selectedTravelPurposeValues, setSelectedTravelPurposeValues] =
     useState<string[]>([]);
@@ -72,16 +69,6 @@ const CreateJourneyPage = () => {
       setEndLocationName(endLocation.formatted);
     }
   }, [endLocation]);
-
-  useEffect(() => {
-    if (startDateValue != null && endDateValue != null) {
-      const duration = calculateDifferenceBetweenDatesInMillis(
-        startDateValue,
-        endDateValue
-      );
-      setTravelDurationInMillis(duration);
-    }
-  }, [startDateValue, endDateValue]);
 
   const isStepValid = (stepIndex: number) => {
     if (stepIndex === firstStep) {
@@ -157,7 +144,7 @@ const CreateJourneyPage = () => {
       setAlertSuccessfullySaved(true);
       setTimeout(() => {
         navigate("/overall-statistics");
-      }, 1500);
+      }, 1100);
     }
   };
 
@@ -220,7 +207,6 @@ const CreateJourneyPage = () => {
           setSelectedTransportValue={setSelectedTransportValue}
           reasonForChosenTransport={transportTypeReason}
           setReasonForChosenTransport={setTransportTypeReason}
-          travelDurationInMillis={travelDurationInMillis}
           startLocationName={startLocationName}
           setStartLocationName={setStartLocationName}
           endLocationName={endLocationName}
@@ -233,7 +219,6 @@ const CreateJourneyPage = () => {
           endLocationName={endLocationName}
           startDateValue={startDateValue}
           endDateValue={endDateValue}
-          travelDurationInMillis={travelDurationInMillis}
           travelPurposeValues={selectedTravelPurposeValues}
           weatherValues={selectedWeatherValues}
           transportValue={selectedTransportValue}

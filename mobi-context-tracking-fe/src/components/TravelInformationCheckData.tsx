@@ -2,7 +2,6 @@ import { Box, Grid, Typography } from "@mui/material";
 import moment from "moment";
 import { LABEL_CONSTANTS } from "../constants/ComponentsLabels";
 import { GeoapifyLocation } from "../models/GeoapifyLocation";
-import { displayDurationInMillisHumanReadable } from "../utils/dateHelpers";
 import { GeoapifyRouting } from "./map/GeoapifyRouting";
 import { MapComponent } from "./map/MapComponent";
 
@@ -15,7 +14,6 @@ interface Props {
   transportTypeReason: string;
   startLocationName: string;
   endLocationName: string;
-  travelDurationInMillis: number;
   startLocation: GeoapifyLocation;
   endLocation: GeoapifyLocation;
 }
@@ -50,7 +48,7 @@ const TravelInformationCheckData = (props: Props) => {
           </Box>
         </Grid>
 
-        <Grid item xs={12} md={5}>
+        <Grid item xs={12} md={6}>
           <Box sx={{ boxShadow: 2, p: 2 }}>
             <Typography variant="subtitle1" gutterBottom>
               {LABEL_CONSTANTS.startTime}
@@ -60,7 +58,7 @@ const TravelInformationCheckData = (props: Props) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={5}>
+        <Grid item xs={12} md={6}>
           <Box sx={{ boxShadow: 2, p: 2 }}>
             <Typography variant="subtitle1" gutterBottom>
               {LABEL_CONSTANTS.endTime}
@@ -70,19 +68,6 @@ const TravelInformationCheckData = (props: Props) => {
             </Typography>
           </Box>
         </Grid>
-        <Grid item xs={12} md={2} sx={{ boxShadow: 1 }}>
-          <Box sx={{ boxShadow: 2, p: 2 }}>
-            <Typography variant="subtitle1" gutterBottom>
-              {LABEL_CONSTANTS.travelDuration}
-            </Typography>
-            <Typography variant="subtitle2" gutterBottom>
-              {displayDurationInMillisHumanReadable(
-                props.travelDurationInMillis
-              )}
-            </Typography>
-          </Box>
-        </Grid>
-
         <Grid item xs={12} md={6}>
           <Box sx={{ boxShadow: 2, p: 2 }}>
             <Typography variant="subtitle1" gutterBottom>
