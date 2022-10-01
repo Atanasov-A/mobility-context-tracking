@@ -8,6 +8,15 @@ const connection = mysql.createConnection({
   database: process.env.MYSQL_DATABASE || "mobi_tracking_db",
 });
 
-connection.connect();
+// Wait for database initialization
+setTimeout(() => {
+  connection.connect((e) => {
+    if (e) {
+      console.log("Db connection state:", connection.state);
+    } else {
+      console.log("Db connection state: ", connection.state);
+    }
+  });
+}, 20000);
 
 module.exports = connection;
