@@ -1,12 +1,11 @@
-// https://webdeasy.de/en/complete-login-system-with-node-js-vue-js-restapi-jwt-part-1-2/#installation
-
 const mysql = require("mysql");
 
 const connection = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  database: "mobi_tracking_db",
-  password: "password",
+  host: process.env.MYSQL_HOST || "localhost",
+  port: process.env.MYSQL_PORT || "3306",
+  user: process.env.MYSQL_USER || "root",
+  password: process.env.MYSQL_PASSWORD || "password",
+  database: process.env.MYSQL_DATABASE || "mobi_tracking_db",
 });
 
 connection.connect();

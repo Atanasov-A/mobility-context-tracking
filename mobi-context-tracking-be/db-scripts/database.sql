@@ -1,3 +1,4 @@
+CREATE DATABASE IF NOT EXISTS mobi_tracking_db;
 CREATE TABLE IF NOT EXISTS users
 (
     id           int(11)      NOT NULL AUTO_INCREMENT,
@@ -92,3 +93,7 @@ VALUES ('car'),
        ('walking'),
        ('long_distance_train'),
        ('public_transport');
+
+
+-- ALTER USER 'root' IDENTIFIED WITH mysql_native_password BY 'password';
+-- flush privileges;
