@@ -1,0 +1,27 @@
+# 
+version: "3.8"
+services:
+  server:
+    build: .
+    ports:
+      - "3091:3090"
+    environment:
+      - MYSQL_HOST=db
+      - MYSQL_PORT=3306
+    depends_on:
+      - db
+    restart: on-failure
+  db:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    command: --default-authentication-plugin=mysql_native_password
+    environment:
+      - MYSQL_DATABASE=mobi_tracking_db
+      - MYSQL_ROOT_PASSWORD=password
+    volumes:
+      - ./db-scripts:/docker-entrypoint-initdb.d
+      - mysql-db:/data/db
+    restart: always
+volumes:
+  mysql-db:
