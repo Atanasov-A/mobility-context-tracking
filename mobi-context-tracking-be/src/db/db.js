@@ -9,14 +9,22 @@ const connection = mysql.createConnection({
 });
 
 // Wait for database initialization
-setTimeout(() => {
-  connection.connect((e) => {
-    if (e) {
-      console.log("Db connection state:", connection.state);
-    } else {
-      console.log("Db connection state: ", connection.state);
-    }
-  });
-}, 20000);
+// setTimeout(() => {
+//   connection.connect((e) => {
+//     if (e) {
+//       console.log("Db connection state:", connection.state);
+//     } else {
+//       console.log("Db connection state: ", connection.state);
+//     }
+//   });
+// }, 20000);
+
+connection.connect((e) => {
+  if (e) {
+    console.log("Db connection state:", connection.state, e);
+  } else {
+    console.log("Db connection state:", connection.state);
+  }
+});
 
 module.exports = connection;
