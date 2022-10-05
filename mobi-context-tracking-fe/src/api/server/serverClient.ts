@@ -1,10 +1,7 @@
 import axios from "axios";
 import { getTokenFromTheStorage } from "../../components/shared/hooks/useAuthToken";
 
-const port = process.env.REACT_APP_SERVER_PORT || "3090";
-const serverHost = process.env.REACT_APP_SERVER_HOST || "https://localhost";
-
-const serverBaseUrl = `${serverHost}:${port}`;
+const serverBaseUrl = process.env.REACT_APP_SERVER_BASE_URL;
 const serverClient = axios.create({
   baseURL: serverBaseUrl,
 });
