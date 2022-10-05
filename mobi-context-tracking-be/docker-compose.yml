@@ -3,7 +3,7 @@ services:
   server:
     build: .
     ports:
-      - "3091:3090"
+      - "5000:3090"
     environment:
       - MYSQL_HOST=db
       - MYSQL_PORT=3306

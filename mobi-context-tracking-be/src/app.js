@@ -17,6 +17,8 @@ require("dotenv").config();
 
 // secure express app removing headers
 app.use(helmet());
+app.set("trust proxy", true);
+app.options("*", cors());
 
 // parse application/json
 app.use(bodyParser.json());

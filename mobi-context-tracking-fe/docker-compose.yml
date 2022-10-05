@@ -3,9 +3,9 @@ services:
   frontend:
     build: .
     ports:
-      - "3003:3000"
+    - "3005:3000"
     environment:
       - REACT_APP_HTTPS=true
-      - REACT_APP_SERVER_BASE_URL=https://localhost:3091
+      - REACT_APP_SERVER_BASE_URL=https://localhost:5000
       - REACT_APP_GEOAPIFY_LOCATIONS_API_KEY=94b538c020ff4355a5e9c4197f983e2b
       - REACT_APP_GEOAPIFY_ROUTING_API_KEY=d3abffc913ca4805bc24744bcb7e497e
