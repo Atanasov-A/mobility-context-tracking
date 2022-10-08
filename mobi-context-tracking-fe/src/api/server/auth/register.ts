@@ -4,5 +4,5 @@ import { UserRegisterCredentials } from "./../../../models/UserRegisterCredentia
 export const registerUser = (
   userRegisterCredentials: UserRegisterCredentials
 ) => {
-  return serverClient.post("/register", { ...userRegisterCredentials });
+  return serverClient.post("/api/register", { ...userRegisterCredentials });
 };

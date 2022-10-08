@@ -2,9 +2,9 @@ import { serverClient } from "../serverClient";
 import { UserLoginCredentials } from "./../../../models/UserLoginCredentials";
 
 export const login = (userLoginCredentials: UserLoginCredentials) => {
-  return serverClient.post("/login", { ...userLoginCredentials });
+  return serverClient.post("/api/login", { ...userLoginCredentials });
 };
 
 export const validateToken = () => {
-  return serverClient.get("/verify-token");
+  return serverClient.get("/api/verify-token");
 };

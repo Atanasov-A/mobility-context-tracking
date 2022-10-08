@@ -29,11 +29,25 @@ app.use(express.json());
 app.use(cors());
 
 // add routes
-app.use("/api", isLoggedIn, mobilityActivityRouter);
-app.use("/", authRouter);
+app.use("/api", authRouter);
+app.use("/api/v1", isLoggedIn, mobilityActivityRouter);
 
-app.get("*", (req, res) => {
+app.get("/api/*", (req, res) => {
   res.send("not existing");
+});
+
+const frontendPath = path.join(
+  __dirname,
+  "..",
+  "..",
+  "mobi-context-tracking-fe/",
+  "build"
+);
+
+app.use(express.static(frontendPath));
+
+app.get("/*", function (req, res) {
+  res.sendFile(path.join(frontendPath, "index.html"));
 });
 
 const options = {
