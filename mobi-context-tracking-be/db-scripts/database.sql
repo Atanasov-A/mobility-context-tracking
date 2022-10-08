@@ -1,5 +1,8 @@
 CREATE DATABASE IF NOT EXISTS mobi_tracking_db;
 USE mobi_tracking_db;
+CREATE USER 'root'@'%' IDENTIFIED BY 'password';
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' WITH GRANT OPTION;
+FLUSH PRIVILEGES ;
 CREATE TABLE IF NOT EXISTS users
 (
     id           int(11)      NOT NULL AUTO_INCREMENT,
