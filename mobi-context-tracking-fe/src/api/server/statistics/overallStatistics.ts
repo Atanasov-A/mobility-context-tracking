@@ -7,13 +7,13 @@ import { serverClient } from "../serverClient";
 
 export const getOverallStatisticsTransportType = () => {
   return serverClient.get<TransportTypeUsageDto>(
-    "/api/overall-statistics-transport-type"
+    "/api/v1/overall-statistics-transport-type"
   );
 };
 
 export const getOverallStatisticsTravelPurpose = () => {
   return serverClient.get<TravelPurpseStatisticDto>(
-    "/api/overall-statistics-travel-purpose"
+    "/api/v1/overall-statistics-travel-purpose"
   );
 };
 
@@ -22,7 +22,7 @@ export const getOverallStatisticsTransportTypeComparsionByMonth = (
   secondTransportType: TransportTypeEnum
 ) => {
   return serverClient.get<TransportTypeUsageMonthDto>(
-    `/api/overall-statistics-transport-type-comparision?firstTransportTypeName=${firstTransportType.toLowerCase()}&secondTransportTypeName=${secondTransportType.toLocaleLowerCase()}`
+    `/api/v1/overall-statistics-transport-type-comparision?firstTransportTypeName=${firstTransportType.toLowerCase()}&secondTransportTypeName=${secondTransportType.toLocaleLowerCase()}`
   );
 };
 
@@ -30,6 +30,6 @@ export const getOverallStatisticsTransportTypeByWeather = (
   transportTypeName: TransportTypeEnum
 ) => {
   return serverClient.get<WeatherCountDto>(
-    `/api/overall-statistics-transport-type-weather?transportTypeName=${transportTypeName.toLowerCase()}`
+    `/api/v1/overall-statistics-transport-type-weather?transportTypeName=${transportTypeName.toLowerCase()}`
   );
 };

@@ -3,8 +3,8 @@ const cors = require("cors");
 const helmet = require("helmet");
 const https = require("https");
 const fs = require("fs");
-var path = require("path");
-var bodyParser = require("body-parser");
+const path = require("path");
+const bodyParser = require("body-parser");
 
 // routes
 const authRouter = require("./routes/authRouter.js");
@@ -15,8 +15,8 @@ const port = 3090;
 var app = express();
 require("dotenv").config();
 
-// secure express app removing headers
-app.use(helmet());
+app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
 app.set("trust proxy", true);
 app.options("*", cors());
 

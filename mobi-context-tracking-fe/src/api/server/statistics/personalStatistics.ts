@@ -4,7 +4,7 @@ import { serverClient } from "../serverClient";
 
 export const getPersonalStatisticsTransportUsage = () => {
   return serverClient.get<PersonalStatisticObjectKeyUsageCountDto>(
-    "/api/personal-statistics-transport-usage"
+    "/api/v1/personal-statistics-transport-usage"
   );
 };
 
@@ -12,6 +12,6 @@ export const getPersonalStatisticsTransportTypeByWeather = (
   transportTypeName: TransportTypeEnum
 ) => {
   return serverClient.get<PersonalStatisticObjectKeyUsageCountDto>(
-    `/api/personal-statistics-transport-type-weather?transportTypeName=${transportTypeName.toLowerCase()}`
+    `/api/v1/personal-statistics-transport-type-weather?transportTypeName=${transportTypeName.toLowerCase()}`
   );
 };
